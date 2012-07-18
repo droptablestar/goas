@@ -1,0 +1,2 @@
+x0:=scan(oasfrontend/tables/10k_1.txt);
+x1:=project(x0,[id,col10,col15,col9997,random]);
