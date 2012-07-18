@@ -1,47 +1,48 @@
 CFLAGS = -c \
-	-I oasfrontend
+	-I lib
 CC = gcc
 OBJS = \
-	oasfrontend/record.o \
-	oasfrontend/scan.o \
-	oasfrontend/select.o \
-	oasfrontend/project.o \
-	oasfrontend/sort.o \
+	lib/record.o \
+	lib/scan.o \
+	lib/select.o \
+	lib/project.o \
+	lib/sort.o \
 	temp.o
 
 all: par temp
-oas_scanner.c oas_scanner.h: oas_scanner.l
-	flex --header-file=oas_scanner.h -P oas_ -o oas_scanner.c $<
+lib/oas_scanner.c lib/oas_scanner.h: lib/oas_scanner.l
+	flex --header-file=lib/oas_scanner.h -P oas_ -o lib/oas_scanner.c $<
 
-oas_parser.c oas_parser.h: oas_parser.y
-	bison -p oas_ -d -o oas_parser.c $<
+lib/oas_parser.c lib/oas_parser.h: lib/oas_parser.y
+	bison -p oas_ -d -o lib/oas_parser.c $<
 
-par: oas_scanner.c oas_scanner.h oas_parser.c oas_parser.h
-	$(CC) $(DEBUG) oas_scanner.c oas_parser.c -o par
+par: lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c lib/oas_parser.h
+	$(CC) $(DEBUG) lib/oas_scanner.c lib/oas_parser.c -o lib/par
 
 temp: $(OBJS)
 	$(CC) $(DEBUG) $(OBJS) -o $@
 
-oasfrontend/record.o: oasfrontend/record.c
+lib/record.o: lib/record.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-oasfrontend/select.o: oasfrontend/select.c
+lib/select.o: lib/select.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-oasfrontend/scan.o: oasfrontend/scan.c 
+lib/scan.o: lib/scan.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-oasfrontend/project.o: oasfrontend/project.c 
+lib/project.o: lib/project.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-oasfrontend/sort.o: oasfrontend/sort.c 
+lib/sort.o: lib/sort.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
 temp.o: temp.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
 clean:
-	rm -rf temp* oas_scanner.c oas_scanner.h oas_parser.c oas_parser.h par*
+	rm -rf temp* lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c \
+  lib/oas_parser.h lib/par*
 
 cleanall: clean 
-	rm -rf oasfrontend/*o
+	rm -rf lib/*o

@@ -1,6 +1,7 @@
 #! /bin/sh
+set -e
 
-make par
-cat $1 | ./par
-make temp
-./temp
+make lib/par
+cat $1 | lib/par
+make lib/temp
+lib/temp
