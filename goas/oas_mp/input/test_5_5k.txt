@@ -1,4 +1,0 @@
-x0:=scan(oasfrontend/tables/5_5k.txt);
-x1:=project(x0,[id,col2,col3,random]);
-x2:=sort(x1,[random,id],ASC);
-x3:=select(x2,[(random,=,34),|,(random,>,3000)]);

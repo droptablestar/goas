@@ -1,5 +1,0 @@
-x0:=scan(oasfrontend/tables/200_10k.txt);
-x1:=project(x0,[id,col10,col197,random]);
-x2:=sort(x1,[random,id],DESC);
-x3:=select(x2,[(random,=,0),|,(random,<,50)]);
-

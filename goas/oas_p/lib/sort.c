@@ -6,11 +6,12 @@
 #include "sort.h"
 
 unsigned int *key_array;
-unsigned int num_keys = 0;
+unsigned int num_keys;
 
 /* Takes a relation and array of keys. Returns the relation with
  * relations->records sorted on those keys. */
 r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
+  num_keys = 0;
   /* Check for empty relation. */
   if (relation->records == NULL) {
     printf("Empty relation passed to sort.\n");
@@ -30,12 +31,12 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
     key_array[k] = -1;
     for (j=0; j<relation->records[0].col_count; j++) {
       if (!strcmp(keys[i], relation->records[0].names[j])) {
-	key_array[k++] = j;
+	key_array[k] = j;
 	is_sortable = 1;
 	break;
       }
     }
-    if (key_array[k] == -1)
+    if (key_array[k++] == -1)
       printf("KEY: %s not found in this relation and is not being used for this"
 	     " sort.\n",keys[i]);
   }

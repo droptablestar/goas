@@ -47,13 +47,22 @@ r_list *project(r_list *relation, const char **keys) {
     key_array = realloc(key_array, num_keys * sizeof(int));
   }
   
-  int is_valid;
   qsort(key_array, num_keys, sizeof(int), int_cmp);
-#pragma omp parallel  shared(relation, key_array, num_keys) private(i,j,k,m,is_valid)
+  if (relation->rec_count > REC_THRESH)
+    relation = parallel_project(relation, keys, num_keys);
+
+  return relation;
+  
+} /* project() */
+
+r_list *parallel_project(r_list *relation, const char **keys,
+			unsigned int num_keys) {
+  int i,j,k,m, is_valid;
+  #pragma omp parallel shared(relation, key_array, num_keys) private(i,j,k,m,is_valid)
   {
-    omp_set_num_threads(8);
     int chunk = relation->rec_count / omp_get_num_threads();
-#pragma omp for schedule(dynamic,chunk)	
+
+    #pragma omp for schedule(dynamic,chunk)
     for (i=0; i<relation->rec_count; i++) {
       for (j=0; j<relation->records[i].col_count; j++) {
 	is_valid = 0;
@@ -70,7 +79,7 @@ r_list *project(r_list *relation, const char **keys) {
     }
     
     int back;
-#pragma omp for schedule(dynamic,chunk) 
+    #pragma omp for schedule(dynamic,chunk)
     for (i=0; i<relation->rec_count; i++) {
       back = 1;
       int c_count = relation->records[i].col_count;
@@ -80,17 +89,17 @@ r_list *project(r_list *relation, const char **keys) {
       }
       relation->records[i].names = realloc(relation->records[i].names,
 					   (num_keys) * sizeof(char *));
-	relation->records[i].data = realloc(relation->records[i].data,
-					    (num_keys) * sizeof(char *));
+      relation->records[i].data = realloc(relation->records[i].data,
+					  (num_keys) * sizeof(char *));
 	
-	relation->records[i].col_count = num_keys;
+      relation->records[i].col_count = num_keys;
     }
   } /* end omp parallal */
 
   free(key_array);
   
   return relation;
-} /* project() */
+} /* parallel_project() */
 
 /* This is the callback function for sorting keys. */
 int int_cmp(const void *a, const void *b) {

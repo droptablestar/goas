@@ -16,7 +16,9 @@ extern void free_r_list(r_list *);
 #define MAX_COLS 500000
 #define MAX_RECS 500000
 
-static int THREAD_COUNT = 4;
+#define REC_THRESH 10000
+
+#define THREAD_COUNT 4
 
 /* This is a record for a row of our database schema. name indicated the name
  * of the column data is the data present in column. */

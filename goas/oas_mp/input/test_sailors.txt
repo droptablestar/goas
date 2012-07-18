@@ -1,4 +1,0 @@
-x0:=scan(oasfrontend/tables/sailors.txt);
-x1:=project(x0,[rating,name]);
-x2:=sort(x1,[rating],ASC);
-x3:=select(x2,[(rating,>,5),&,(name,=,blackbeard),|,(name,=,captain ahab),|,(name,=,peg leg pete)]);
