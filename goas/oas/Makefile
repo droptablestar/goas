@@ -1,5 +1,4 @@
-CFLAGS = -c \
-	-I lib
+CFLAGS = -c
 CC = gcc
 OBJS = \
 	lib/record.o \
@@ -41,9 +40,12 @@ lib/sort.o: lib/sort.c
 lib/temp.o: lib/temp.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-clean:
-	rm -rf lib/temp* lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c \
+cleanpar:
+	rm -rf lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c \
   lib/oas_parser.h lib/par* 
 
-cleanall: clean 
+cleanc:
+	rm -rf lib/*o
+
+cleanall: cleanpar
 	rm -rf lib/*o

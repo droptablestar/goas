@@ -1,3 +1,0 @@
-x0:=scan(lib/tables/1_10k.txt);
-x1:=project(x0,[id,junk]);
-x2:=sort(x1,[id],DESC);

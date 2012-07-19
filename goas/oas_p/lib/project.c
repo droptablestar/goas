@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <math.h>
+#include <semaphore.h>
 
 #include "record.h"
 #include "project.h"
@@ -12,7 +13,8 @@ unsigned int num_keys;
 unsigned int count0 = 0;
 unsigned int count1 = 0;
 
-sem_t lock;
+pthread_mutex_t mutex;
+pthread_barrier_t barr;
 
 /* Takes a relation and an array of keys as parameters. Returns the relation
  * with only the keys remaining in each record. */
@@ -38,14 +40,14 @@ r_list *project(r_list *relation, const char **keys) {
     key_array[k] = -1;
     for (j=0; j<c_count; j++) {
       if (!strcmp(keys[i], relation->records[0].names[j])) {
-	key_array[k++] = j;
-	is_projectable = 1;
-	break;
+        key_array[k++] = j;
+        is_projectable = 1;
+        break;
       }
     }
     if (key_array[k] == -1)
       printf("KEY: %s not found in this relation and is not being used for this"
-	     " projection.\n",keys[i]);
+             " projection.\n",keys[i]);
   }
   /* No columns match in this relation. */
   if (!is_projectable) return relation;
@@ -57,9 +59,12 @@ r_list *project(r_list *relation, const char **keys) {
   }
   
   qsort(key_array, num_keys, sizeof(int), int_cmp);
+
   pthread_t thread[THREAD_COUNT];
   int ids[THREAD_COUNT];
-  sem_init(&lock, 0, 1);
+
+  pthread_mutex_init(&mutex, NULL);
+  pthread_barrier_init(&barr, NULL, THREAD_COUNT);
   for (i=0; i<THREAD_COUNT; i++) {
     ids[i] = i;
     pthread_create(&thread[i], NULL, project_p2, (void *)&ids[i]);
@@ -97,14 +102,14 @@ void *project_p(void *arg) {
   for (i=bottom; i<top; i++) {
     for (j=0; j<rel->records[i].col_count; j++) {
       for (k=key_array[0],m=0; m<num_keys; m++,k=key_array[m]) {
-  	if (k==j) {
-	  keep = 1;
-  	  break;
-  	}
+        if (k==j) {
+          keep = 1;
+          break;
+        }
       }
       if (!keep) {
-	free(rel->records[i].names[j]);
-	free(rel->records[i].data[j]);
+        free(rel->records[i].names[j]);
+        free(rel->records[i].data[j]);
       }
       keep = 0;
     }
@@ -118,52 +123,68 @@ void *project_p(void *arg) {
       rel->records[i].data[j] = rel->records[i].data[key_array[j]];
     }
     rel->records[i].names = realloc(rel->records[i].names,
-  					 (num_keys) * sizeof(char *));
+                                         (num_keys) * sizeof(char *));
     rel->records[i].data = realloc(rel->records[i].data,
-  					(num_keys) * sizeof(char *));
-	
+                                        (num_keys) * sizeof(char *));
+        
     rel->records[i].col_count = num_keys;
   }
 }
 
 void *project_p2(void *arg) {
-  int keep=0,i,j,k,m;
-  while (count0 < num_keys + 1) {
-    sem_wait(&lock);
-    count0++;
-    i = count0-1;
-    sem_post(&lock);
+  int keep=0,i,j,k,m,count,r_count;
+  r_count = rel->rec_count;
+
+  pthread_mutex_lock(&mutex);
+  while (count0 < r_count) {
+    i = count0;
+    count0 = count0+1;
+    pthread_mutex_unlock(&mutex);
+    count++;
     for (j=0; j<rel->records[i].col_count; j++) {
       for (k=key_array[0],m=0; m<num_keys; m++,k=key_array[m]) {
-  	if (k==j) {
-	  keep = 1;
-  	  break;
-  	}
+        if (k==j) {
+          keep = 1;
+          break;
+        }
       }
       if (!keep) {
-	free(rel->records[i].names[j]);
-	free(rel->records[i].data[j]);
+        free(rel->records[i].names[j]);
+        free(rel->records[i].data[j]);
       }
       keep = 0;
     }
+    pthread_mutex_lock(&mutex);
   }
-    
+  pthread_mutex_unlock(&mutex);
+
+  int rc = pthread_barrier_wait(&barr);
+  if (rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD) {
+    printf("Counld't wait for projection barrier. Bailing.\n");
+    exit(-1);
+  }
+
   int back;
-  while (count1 < num_keys+1) {
-    sem_wait(&lock);
+  pthread_mutex_lock(&mutex);
+  while (count1 < r_count+1) {
+    i = count1;
     count1++;
-    i = count1-1;
-    sem_post(&lock);
+    pthread_mutex_unlock(&mutex);
     back = 1;
     for (j=0; j<num_keys; j++) {
+      printf("THREAD:%d moving:%d %d <- %d %d\n",*(int*)arg,i,j,i,key_array[j]);
       rel->records[i].names[j] = rel->records[i].names[key_array[j]];
       rel->records[i].data[j] = rel->records[i].data[key_array[j]];
     }
+    printf("THREAD:%d reallocing:%d\n",*(int*)arg,i);
     rel->records[i].names = realloc(rel->records[i].names,
-  					 (num_keys) * sizeof(char *));
+                                         (num_keys) * sizeof(char *));
     rel->records[i].data = realloc(rel->records[i].data,
-  					(num_keys) * sizeof(char *));
-	
+                                        (num_keys) * sizeof(char *));
+        
     rel->records[i].col_count = num_keys;
-  }
+    pthread_mutex_lock(&mutex);
+ }
+  pthread_mutex_unlock(&mutex);
+  printf("Thread:%d count:%d\n",*(int *)arg,count);
 }

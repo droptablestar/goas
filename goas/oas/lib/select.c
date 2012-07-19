@@ -6,6 +6,8 @@
 
 unsigned int *key_array;
 
+/* Removes records from the list of records that don't match the arguments
+ * found in the keys array. */
 r_list *select(r_list *relation, const char **keys) {
   /* Make sure there is something in the relation first. */
   if (relation == NULL) {
@@ -19,7 +21,8 @@ r_list *select(r_list *relation, const char **keys) {
   unsigned int num_keys = len_keys / 4;
 
   key_array = malloc(num_keys * sizeof(int));
-
+  check_malloc(key_array, "select()");
+  
   unsigned int is_selectable = 0;
   int j,k;
   
@@ -39,59 +42,53 @@ r_list *select(r_list *relation, const char **keys) {
   
   k=0;
   int num_kept=0;
-  int keep[relation->rec_count];
+  int r_count = relation->rec_count;
+  int keep[r_count];
   /* Determine which records fit the selection. */
-    for (i=0;i<relation->rec_count;i++) {
-      if (evaluate(&(relation->records[i]), keys, num_keys, len_keys)) {
-	  keep[k++] = i;
-	  num_kept++;
-      }
-      else {
-      	for (j=0;j<relation->records[i].col_count;j++) {
-      	  free(relation->records[i].names[j]);
-      	  free(relation->records[i].data[j]);
-      	}
-      	free(relation->records[i].names);
-      	free(relation->records[i].data);
-      }
+  for (i=0; i<r_count; i++) {
+    if (evaluate(&(relation->records[i]), keys, num_keys, len_keys)) {
+      keep[num_kept++] = i;
     }
-  
-  /* printf("NUM_KEPT:%d\n",num_kept); */
-  /* Move the records we are keeping to the beginning of the array. Realloc
-   * to remove the records that weren't selected. */
-  /* for (i=0;i<num_kept;i++) printf("%d ",keep[i]); */
-  /* printf("\n"); */
-  /* exit(1); */
+    else {
+      for (j=0; j<relation->records[i].col_count; j++) {
+	free(relation->records[i].names[j]);
+	free(relation->records[i].data[j]);
+      }
+      free(relation->records[i].names);
+      free(relation->records[i].data);
+    }
+  }
+
+  /* Move the records that were kept to the beginning of the records array. */
   for (j=0; j<num_kept; j++) 
     relation->records[j] = relation->records[keep[j]];
-  relation->records = realloc(relation->records,
-			      (num_kept) * sizeof(record));
-
 
   /* Tidy up memory and the records count. */
+  relation->records = realloc(relation->records,
+			      (num_kept) * sizeof(record));
   relation->rec_count = num_kept;
   free(key_array);
 } /* select() */
 
+/* Implements the = predicate. */
 int eq(const char *a, const char *b) {
-  /* printf("EQ %s %s\n",a,b); */
   if (!strcmp(a,b)) return 1;
   else return 0;
-}
+} /* eq() */
 
+/* Implements the greater than predicate. Currently only suited for digits. */
 int gt(const char *a, const char *b) {
-  /* printf("GT %s %s\n",a,b); */
   if (atoi(a) > atoi(b)) return 1;
   else return 0;
-}
+} /* gt() */
 
+/* Implements the less than predicate. Currently only suited for digits. */
 int lt(const char *a, const char *b) {
-  /* printf("LT %s %s\n",a,b); */
   if (atoi(a) < atoi(b)) return 1;
   else return 0;
+} /* lt() */
 
-}
-
+/* Evaluates ALL the predicates found in keys. */
 int evaluate(record *rec, const char **keys, int num_keys, int len_keys) {
   int i,j;
   int result[num_keys];
@@ -99,9 +96,7 @@ int evaluate(record *rec, const char **keys, int num_keys, int len_keys) {
   for (i=3,j=0;j<num_keys;i+=4,j++) {
     result[j] = eval_part(rec, keys, j, i-3);
   }
-  /* printf("FIRST:\n"); */
-  /* for (i=0;i<num_keys;i++) printf("%d ",result[i]); */
-  /* printf("\n"); */
+
   for (i=3,j=0;j<num_keys-1;i+=4,j+=2) {
     switch ((char)(*keys[i])) {
     case '&': result[j] = result[j] && result[j+1]; result[j+1]=0; break;
@@ -109,15 +104,13 @@ int evaluate(record *rec, const char **keys, int num_keys, int len_keys) {
     }
   }
 
-  /* printf("SECOND:\n"); */
-  /* for (i=0;i<num_keys;i++) printf("%d ",result[i]); */
-  /* printf("\n"); */
   for (i=0;i<num_keys;i++) 
     if (result[i] == 1)
       return 1;
   return 0;
-}
-    
+} /* evaluate() */
+
+/* Evaluates one predicate from the keys array. */
 int eval_part(record *rec, const char **keys, int d_index, int k_index) {
   int result;
   switch ((char)(*keys[k_index+1])) {
@@ -127,4 +120,4 @@ int eval_part(record *rec, const char **keys, int d_index, int k_index) {
   }
 
   return result;
-}
+} /* eval_part() */

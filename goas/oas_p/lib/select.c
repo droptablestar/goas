@@ -1,10 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 
 #include "record.h"
 #include "select.h"
 
 unsigned int *key_array;
+unsigned int len_keys=1;
+unsigned int num_keys = len_keys / 4;
+
+unsigned int num_kept=0;
+unsigned int *keep;
+
+unsigned int count0 = 0;
+unsigned int count1 = 0;
+
+pthread_barrier_t barr;
+pthread_mutex_t mutex;
 
 r_list *select(r_list *relation, const char **keys) {
   /* Make sure there is something in the relation first. */
@@ -14,63 +26,65 @@ r_list *select(r_list *relation, const char **keys) {
   }
   
   int i;
-  unsigned int len_keys=1;
   for (i=0;keys[i];i++) len_keys++;
-  unsigned int num_keys = len_keys / 4;
+  num_keys = len_keys / 4;
 
   key_array = malloc(num_keys * sizeof(int));
 
   unsigned int is_selectable = 0;
   int j,k;
-  
   /* Find out which index each key is associated with. */
   for (i=0,k=0; i<len_keys; i+=4,k++) {
     for (j=0; j<relation->records[0].col_count; j++) {
       if (!strcmp(keys[i], relation->records[0].names[j])) {
-	key_array[k] = j;
-	is_selectable = 1;
-	break;
+        key_array[k] = j;
+        is_selectable = 1;
+        break;
       }
     }
   }
   
   /* No indexes match these keys...return the original relation. */
   if (!is_selectable) return relation;
-  
+  keep = malloc(relation->rec_count * sizeof(int));
   k=0;
-  int num_kept=0;
-  int keep[relation->rec_count];
-  /* Determine which records fit the selection. */
-    for (i=0;i<relation->rec_count;i++) {
-      if (evaluate(&(relation->records[i]), keys, num_keys, len_keys)) {
-	  keep[k++] = i;
-	  num_kept++;
-      }
-      else {
-      	for (j=0;j<relation->records[i].col_count;j++) {
-      	  free(relation->records[i].names[j]);
-      	  free(relation->records[i].data[j]);
-      	}
-      	free(relation->records[i].names);
-      	free(relation->records[i].data);
-      }
-    }
+
+  pthread_t thread[THREAD_COUNT];
+  pthread_mutex_init(&mutex, NULL);
+  pthread_barrier_init(&barr, NULL, THREAD_COUNT);
+
+  for (i=0; i<THREAD_COUNT; i++)
+    pthread_create(&thread[i], NULL, select_p, (void *)relation);
+
+  for (i=0; i<THREAD_COUNT; i++)
+    pthread_join(&thread[i], NULL);
   
-  /* printf("NUM_KEPT:%d\n",num_kept); */
-  /* Move the records we are keeping to the beginning of the array. Realloc
-   * to remove the records that weren't selected. */
-  /* for (i=0;i<num_kept;i++) printf("%d ",keep[i]); */
-  /* printf("\n"); */
-  /* exit(1); */
-  for (j=0; j<num_kept; j++) 
-    relation->records[j] = relation->records[keep[j]];
-  relation->records = realloc(relation->records,
-			      (num_kept) * sizeof(record));
+  /* Determine which records fit the selection. */
+  /* for (i=0;i<relation->rec_count;i++) { */
+  /*   if (evaluate(&(relation->records[i]), keys, num_keys, len_keys)) { */
+  /*     keep[k++] = i; */
+  /*     num_kept++; */
+  /*   } */
+  /*   else { */
+  /*     for (j=0;j<relation->records[i].col_count;j++) { */
+  /*    free(relation->records[i].names[j]); */
+  /*    free(relation->records[i].data[j]); */
+  /*     } */
+  /*     free(relation->records[i].names); */
+  /*     free(relation->records[i].data); */
+  /*   } */
+  /* } */
+  
+  /* for (j=0; j<num_kept; j++)  */
+  /*   relation->records[j] = relation->records[keep[j]]; */
+  /* relation->records = realloc(relation->records, */
+  /*                          (num_kept) * sizeof(record)); */
 
 
   /* Tidy up memory and the records count. */
   relation->rec_count = num_kept;
   free(key_array);
+  free(keep);
 } /* select() */
 
 int eq(const char *a, const char *b) {
@@ -127,4 +141,44 @@ int eval_part(record *rec, const char **keys, int d_index, int k_index) {
   }
 
   return result;
+}
+
+void *select_p(void *r) {
+  r_list *rel = (r_list *)r;
+  int i,r_count,j;
+  r_count = rel->rec_count;
+  
+  /* Determine which records fit the selection. */
+  pthread_mutex_lock(&mutex);
+  while(count0 < r_count) {
+    i = count0++;
+    pthread_mutex_unlock(&mutex);
+    if (evaluate(&(relation->records[i]), keys, num_keys, len_keys)) {
+      keep[num_kept++] = i;
+    }
+    else {
+      for (j=0;j<relation->records[i].col_count;j++) {
+        free(relation->records[i].names[j]);
+        free(relation->records[i].data[j]);
+      }
+      free(relation->records[i].names);
+      free(relation->records[i].data);
+    }
+    pthread_mutex_lock(&mutex);
+  }
+  
+  int rc = pthread_barrier_wait(&barr);
+  if (rc != 0 && rc != PTHREAD_BARRIER_SERIAL_THREAD) {
+    printf("Counld't wait for projection barrier. Bailing.\n");
+    exit(-1);
+  }
+
+  pthread_mutex_lock(&mutex);
+  while (count1 < num_kept) {
+    i = count1++;
+    pthread_mutex_unlock(&mutex);
+    relation->records[j] = relation->records[keep[j]];
+  relation->records = realloc(relation->records,
+                              (num_kept) * sizeof(record));
+
 }

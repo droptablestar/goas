@@ -1,0 +1,3 @@
+x0:=scan(lib/tables/1_1.txt);
+x1:=project(x0,[id]);
+x2:=sort(x1,[id],DESC);

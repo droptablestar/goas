@@ -1,0 +1,2 @@
+x0:=scan(lib/tables/500k_10.txt);
+x1:=project(x0,[id,col1,col40,col997,col49999,col15,random]);

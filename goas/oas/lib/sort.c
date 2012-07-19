@@ -23,7 +23,8 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
   for(i=0;keys[i];i++) num_keys++;
 
   key_array = malloc(num_keys * sizeof(int));
-
+  check_malloc(key_array, "sort()");
+  
   /* will let us check to see if any keys matched in this relation. */
   unsigned int is_sortable = 0;
   
@@ -41,7 +42,6 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
       printf("KEY: %s not found in this relation and is not being used for this"
 	     " sort.\n",keys[i]);
   }
-
 
   /* There were keys in this projection not actually in the relation. */
   if (k != i) {
@@ -61,8 +61,7 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
 } /* sort() */
 
 /* This is the callback function for qsort (sorting in ascending order. Takes two
- * records and returns
- * an int determining which is the smallest. */
+ * records and returns an int determining which is the smallest. */
 int struct_cmp_asc(const void *a, const void *b) {
   record *ia = (record *)a;
   record *ib = (record *)b;
@@ -78,9 +77,8 @@ int struct_cmp_asc(const void *a, const void *b) {
   return 1;
 } /* struct_cmp_asc() */
 
-/* This is the callback function for qsort (sorting in ascending order. Takes two
- * records and returns
- * an int determining which is the smallest. */
+/* This is the callback function for qsort (sorting in descending order. Takes two
+ * records and returns an int determining which is the smallest. */
 int struct_cmp_desc(const void *a, const void *b) {
   record *ia = (record *)a;
   record *ib = (record *)b;
