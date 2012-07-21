@@ -1,51 +1,59 @@
 CFLAGS = -c
 CC = gcc
+ARCHIVER = ar
+LIBLOC = lib/
+LIBNAME = -loas
 OBJS = \
-	lib/record.o \
-	lib/scan.o \
-	lib/select.o \
-	lib/project.o \
-	lib/sort.o \
-	lib/temp.o
+	src/record.o \
+	src/scan.o \
+	src/select.o \
+	src/project.o \
+	src/sort.o \
 
-all: lib/par lib/temp
+all: src/par src/temp
 
-lib/oas_scanner.c lib/oas_scanner.h: lib/oas_scanner.l
-	flex --header-file=lib/oas_scanner.h -P oas_ -o lib/oas_scanner.c $<
+src/oas_scanner.c src/oas_scanner.h: src/oas_scanner.l
+	flex --header-file=src/oas_scanner.h -P oas_ -o src/oas_scanner.c $<
 
-lib/oas_parser.c lib/oas_parser.h: lib/oas_parser.y
-	bison -p oas_ -d -o lib/oas_parser.c $<
+src/oas_parser.c src/oas_parser.h: src/oas_parser.y
+	bison -p oas_ -d -o src/oas_parser.c $<
 
-lib/par: lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c lib/oas_parser.h
-	$(CC) $(DEBUG) lib/oas_scanner.c lib/oas_parser.c -o lib/par
+src/par: src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
+	$(CC) $(DEBUG) src/oas_scanner.c src/oas_parser.c -o bin/par
 
-lib/temp: $(OBJS)
-	$(CC) $(DEBUG) $(OBJS) -o $@
+bin/temp: src/temp.c
+	$(CC) $< -L$(LIBLOC) $(LIBNAME) -o $@
 
-lib/record.o: lib/record.c
+lib/liboas: $(OBJS)
+	$(ARCHIVER) rcs lib/liboas.a $(OBJS)
+
+bin/tempD: $(OBJS) src/temp.o
+	$(CC) $(DEBUG) $(OBJS) src/temp.o -o $@
+
+src/record.o: src/record.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/select.o: lib/select.c
+src/select.o: src/select.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/scan.o: lib/scan.c 
+src/scan.o: src/scan.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/project.o: lib/project.c 
+src/project.o: src/project.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/sort.o: lib/sort.c 
+src/sort.o: src/sort.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/temp.o: lib/temp.c
+src/temp.o: src/temp.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
 cleanpar:
-	rm -rf lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c \
-  lib/oas_parser.h lib/par* 
+	rm -rf src/oas_scanner.c src/oas_scanner.h src/oas_parser.c \
+  src/oas_parser.h 
 
 cleanc:
-	rm -rf lib/*o
+	rm src/temp*
 
-cleanall: cleanpar
-	rm -rf lib/*o
+cleanall: cleanpar cleanc
+	rm -rf src/*o 

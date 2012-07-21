@@ -1,0 +1,9 @@
+sid	rating	name
+0	1	john
+1	5	jim
+2	3	long john silver
+3	3	peg leg pete
+4	3	peg leg pete
+5	9	captain ahab
+6	8	blackbeard
+

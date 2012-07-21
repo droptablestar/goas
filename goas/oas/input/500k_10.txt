@@ -1,2 +1,4 @@
-x0:=scan(lib/tables/500k_10.txt);
+x0:=scan(src/tables/500k_10.txt);
 x1:=project(x0,[id,col1,col40,col997,col49999,col15,random]);
+x2:=select(x1,[(id,=,4),|,(id,=,7)]);
+x3:=sort(x2,[id],DESC);

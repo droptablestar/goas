@@ -2,7 +2,7 @@
 
 set -e
 
-make lib/par DEBUG='-g -ggdb'
-cat $1 | lib/par
-make lib/temp DEBUG='-g -ggdb'
-lib/temp
+make src/par DEBUG='-g -ggdb'
+cat $1 | bin/par
+make bin/tempD DEBUG='-g -ggdb'
+bin/tempD

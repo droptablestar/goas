@@ -1,4 +1,4 @@
-x0:=scan(lib/tables/1k_2k.txt);
-x1:=project(x0,[id,col1,col40,col997,random]);
-x2:=select(x1,[(random,>,500)]);
+x0:=scan(src/tables/1k_2k.txt);
+x1:=select(x0,[(random,>,500)]);
+x2:=project(x1,[id,col1,col40,col997,random]);
 x3:=sort(x2,[random,id],ASC);

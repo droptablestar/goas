@@ -1,3 +1,4 @@
-x0:=scan(lib/tables/1_10k.txt);
-x1:=project(x0,[id,junk]);
-x2:=sort(x1,[id],DESC);
+x0:=scan(src/tables/1_10k.txt);
+x1:=select(x0,[(id,>,5000),&,(id,<,7000)]);
+x2:=project(x1,[id,junk]);
+x3:=sort(x2,[id],DESC);
