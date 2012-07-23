@@ -18,14 +18,16 @@ src/oas_scanner.c src/oas_scanner.h: src/oas_scanner.l
 src/oas_parser.c src/oas_parser.h: src/oas_parser.y
 	bison -p oas_ -d -o src/oas_parser.c $<
 
-src/par: src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
-	$(CC) $(DEBUG) src/oas_scanner.c src/oas_parser.c -o bin/par
+bin/par: src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
+	$(CC) $(DEBUG) src/oas_scanner.c src/oas_parser.c -o $@
+	make cleanpar
 
 bin/temp: src/temp.c
 	$(CC) $< -L$(LIBLOC) $(LIBNAME) -o $@
 
 lib/liboas: $(OBJS)
 	$(ARCHIVER) rcs lib/liboas.a $(OBJS)
+	make cleanobjs
 
 bin/tempD: $(OBJS) src/temp.o
 	$(CC) $(DEBUG) $(OBJS) src/temp.o -o $@
@@ -49,11 +51,15 @@ src/temp.o: src/temp.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
 cleanpar:
-	rm -rf src/oas_scanner.c src/oas_scanner.h src/oas_parser.c \
-  src/oas_parser.h 
+	rm src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
 
-cleanc:
-	rm src/temp*
+cleantemp:
+	rm -rf src/temp*
 
-cleanall: cleanpar cleanc
-	rm -rf src/*o 
+cleanobjs:
+	rm src/*o
+
+cleanbin:
+	rm -rf bin/*
+
+cleanall: cleanpar cleantemp cleanobjs

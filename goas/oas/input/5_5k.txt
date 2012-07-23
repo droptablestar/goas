@@ -1,4 +1,0 @@
-x0:=scan(src/tables/5_5k.txt);
-x1:=select(x0,[(random,=,262),|,(random,>,3000)]);
-x2:=project(x1,[id,col3,random]);
-x3:=sort(x2,[random,id],ASC);

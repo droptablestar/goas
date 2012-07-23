@@ -34,22 +34,24 @@ r_list *project(r_list *relation, const char **keys) {
 
   /* Find out which index each key is associated with. */
   for (i=0,k=0; i<num_keys; i++) {
-    key_array[k] = -1;
-    for (j=0; j<c_count; j++) {
-      if (!strcmp(keys[i], relation->records[0].names[j])) {
-	key_array[k++] = j;
-	is_projectable = 1;
-	break;
+      key_array[k] = -1;
+      for (j=0; j<c_count; j++) {
+	  if (!strcmp(keys[i], relation->records[0].names[j])) {
+	      key_array[k] = j;
+	      is_projectable = 1;
+	      break;
+	  }
       }
-    }
-    if (key_array[k] == -1)
-      printf("KEY: [%s] not found in this relation and is not being used for this"
-	     " projection.\n",keys[i]);
+      if (key_array[k] == -1)
+	  printf("KEY: [%s] not found in this relation and is not being used for this"
+		 " projection.\n",keys[i]);
+      else
+	  k++;
   }
-
+  
   /* No columns match in this relation. */
   if (!is_projectable) return relation;
-
+  
   /* There were keys in this projection not actually in the relation. */
   if (k != i) {
     num_keys = k;
@@ -77,9 +79,7 @@ r_list *project(r_list *relation, const char **keys) {
 
   /* Go through each record and move the columns that weren't freed to the
    * beginning of the array. */
-  int back;
   for (i=0; i<r_count; i++) {
-    back = 1;
     for (j=0; j<num_keys; j++) {
       relation->records[i].names[j] = relation->records[i].names[key_array[j]];
       relation->records[i].data[j] = relation->records[i].data[key_array[j]];

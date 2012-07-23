@@ -1,4 +1,0 @@
-x0:=scan(src/tables/10_50.txt);
-x1:=select(x0,[(random,<,20),|,(id,=,20)]);
-x2:=project(x1,[id,col1,col8,random]);
-x3:=sort(x2,[random,id],DESC);

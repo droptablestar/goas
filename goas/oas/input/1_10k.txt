@@ -1,4 +1,0 @@
-x0:=scan(src/tables/1_10k.txt);
-x1:=select(x0,[(id,>,5000),&,(id,<,7000)]);
-x2:=project(x1,[id,junk]);
-x3:=sort(x2,[id],DESC);

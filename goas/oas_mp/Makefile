@@ -1,48 +1,64 @@
-CFLAGS = -c \
-	-fopenmp
+CFLAGS = -c 
+OMP = -fopenmp
 CC = gcc
+ARCHIVER = ar
+LIBLOC = lib/
+LIBNAME = -loas
 OBJS = \
-	lib/record.o \
-	lib/scan.o \
-	lib/select.o \
-	lib/project.o \
-	lib/sort.o \
-	lib/temp.o
+	src/record.o \
+	src/scan.o \
+	src/select.o \
+	src/project.o \
+	src/sort.o \
 
-all: lib/par lib/temp
+all: src/par src/temp
 
-lib/oas_scanner.c lib/oas_scanner.h: lib/oas_scanner.l
-	flex --header-file=lib/oas_scanner.h -P oas_ -o lib/oas_scanner.c $<
+src/oas_scanner.c src/oas_scanner.h: src/oas_scanner.l
+	flex --header-file=src/oas_scanner.h -P oas_ -o src/oas_scanner.c $<
 
-lib/oas_parser.c lib/oas_parser.h: lib/oas_parser.y
-	bison -p oas_ -d -o lib/oas_parser.c $<
+src/oas_parser.c src/oas_parser.h: src/oas_parser.y
+	bison -p oas_ -d -o src/oas_parser.c $<
 
-lib/par: lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c lib/oas_parser.h
-	$(CC) $(DEBUG) lib/oas_scanner.c lib/oas_parser.c -o lib/par
+bin/par: src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
+	$(CC) $(DEBUG) src/oas_scanner.c src/oas_parser.c -o $@
+	make cleanpar
 
-lib/temp: $(OBJS)
-	$(CC) -fopenmp $(DEBUG) $(OBJS) -o $@
+lib/liboas: $(OBJS)
+	$(ARCHIVER) rcs lib/liboas.a $(OBJS)
+	make cleanobjs
 
-lib/record.o: lib/record.c
+bin/temp: src/temp.c
+	$(CC) $(OMP) -L$(LIBLOC) $(LIBNAME) $< -o $@
+
+bin/tempD: $(OBJS) src/temp.o
+	$(CC) $(OMP) $(DEBUG) $(OBJS) src/temp.o -o $@
+
+src/record.o: src/record.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/select.o: lib/select.c
+src/select.o: src/select.c
+	$(CC) $(CFLAGS) $(OMP) $(DEBUG) $< -o $@
+
+src/scan.o: src/scan.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/scan.o: lib/scan.c 
+src/project.o: src/project.c 
+	$(CC) $(CFLAGS) $(OMP) $(DEBUG) $< -o $@
+
+src/sort.o: src/sort.c 
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/project.o: lib/project.c 
+src/temp.o: src/temp.c
 	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
 
-lib/sort.o: lib/sort.c 
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+cleanpar:
+	-rm src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
 
-lib/temp.o: lib/temp.c
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+cleantemp:
+	-rm src/temp* bin/temp
 
-clean:
-	rm -rf lib/temp* lib/oas_scanner.c lib/oas_scanner.h lib/oas_parser.c lib/oas_parser.h lib/par*
+cleanobjs:
+	-rm src/*o
 
-cleanall: clean 
-	rm -rf lib/*o
+cleanall: cleantemp cleanobjs cleanpar
+	-rm -rf bin/*

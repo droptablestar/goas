@@ -60,7 +60,7 @@ program:	line {
     int i;
     fprintf(fp, "\tprint_r_list(%s);\n",$1);
     for (i=0;i<free_count;i++)
-	fprintf(fp, "\tfree_r_list(%s);\n",$1);
+	fprintf(fp, "\tfree_r_list(%s);\n",free_list[i]);
     fprintf(fp, "\treturn 0;\n}\n");
     } ;
 

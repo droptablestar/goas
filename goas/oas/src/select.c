@@ -26,17 +26,25 @@ r_list *select(r_list *relation, const char **keys) {
   unsigned int is_selectable = 0;
   int j,k;
   
+  unsigned int c_count = relation->records[0].col_count;
+
   /* Find out which index each key is associated with. */
-  for (i=0,k=0; i<len_keys; i+=4,k++) {
-    for (j=0; j<relation->records[0].col_count; j++) {
+  for (i=0,k=0; i<len_keys; i+=4) {
+    key_array[k] = -1;
+    for (j=0; j<c_count; j++) {
       if (!strcmp(keys[i], relation->records[0].names[j])) {
 	key_array[k] = j;
 	is_selectable = 1;
 	break;
       }
     }
+    if (key_array[k] == -1)
+      printf("KEY: [%s] not found in this relation and is not being used for this"
+	     " selection.\n",keys[i]);
+    else
+      k++;
   }
-  
+
   /* No indexes match these keys...return the original relation. */
   if (!is_selectable) return relation;
   
@@ -61,7 +69,8 @@ r_list *select(r_list *relation, const char **keys) {
 
   /* Move the records that were kept to the beginning of the records array. */
   for (j=0; j<num_kept; j++) 
-    relation->records[j] = relation->records[keep[j]];
+    if (j != keep[j])
+      relation->records[j] = relation->records[keep[j]];
 
   /* Tidy up memory and the records count. */
   relation->records = realloc(relation->records,
@@ -96,9 +105,8 @@ int evaluate(record *rec, const char **keys, int num_keys, int len_keys) {
   int i,j;
   int result[num_keys];
   /* i:keys, j:data */
-  for (i=3,j=0;j<num_keys;i+=4,j++) {
+  for (i=3,j=0;j<num_keys;i+=4,j++) 
     result[j] = eval_part(rec, keys, j, i-3);
-  }
 
   for (i=3,j=0;j<num_keys-1;i+=4,j+=2) {
     switch ((char)(*keys[i])) {
