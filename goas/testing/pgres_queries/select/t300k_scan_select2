@@ -1,0 +1,1 @@
+psql -d postgres -c "select * from t300k where twenty<9 OR twenty=18;"

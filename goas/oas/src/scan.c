@@ -5,7 +5,13 @@
 #include "record.h"
 #include "scan.h"
 
-/* scans the file specified by file_name */
+unsigned int NUM_COLS = MAX_COLS;
+unsigned int NUM_RECS = MAX_RECS;
+
+/* Scans the file specified by file_name allocates all the memory necessary
+ * for a relation. When we leave this function NUM_COLS and NUM_RECS are
+ * accurate measure of the actual number of columns and number of records
+ * currently in the relation. */ 
 r_list *scan(char *file_name) {
   /* Variables for getting the column names. */
   char **column_names;
@@ -20,10 +26,16 @@ r_list *scan(char *file_name) {
   size_t nbytes=80;
   char *line = NULL;
 
-  FILE *fr = fopen(file_name, "r");
+  /* FILE *fr = fopen(file_name, "r"); */
+  FILE *fr = fopen(file_name, "rb");
 
   if (fr == NULL) {
     printf("Unable to open file [%s].\n",file_name);
+    exit(-1);
+  }
+  struct stat sb;
+  if (stat(file_name, &sb) < 0) {
+    perror("fstat");
     exit(-1);
   }
 
@@ -34,10 +46,8 @@ r_list *scan(char *file_name) {
     fclose(fr);
     exit(-1);
   }
-
-  int i=0;
   parsed_line = strtok(line, delims);
-
+  int i = 0;
   /* strip out the column names. separated by \t */
   while (parsed_line != NULL) {
     if (i < NUM_COLS) 
@@ -53,6 +63,7 @@ r_list *scan(char *file_name) {
     strcpy(column_names[i++], parsed_line);
     parsed_line = strtok(NULL, delims);
   }
+  NUM_COLS = i;
   i--;
 
   /* Remove trailing \n */
@@ -68,44 +79,19 @@ r_list *scan(char *file_name) {
   }
 
   /* Initialize the relation. */
-  r_list *relation = init_r_list();
-  
-  /* Read the lines and create a record for each entry. */
-  do {
-    record *rec = init_record();
-    parsed_line = strtok(line, delims);
-    i=0;
-    /* Add each field to the record. */
-    while (parsed_line != NULL && parsed_line[0] != '\n') {
-      if (parsed_line[strlen(parsed_line)-1] == '\n')
-	parsed_line[strlen(parsed_line)-1] = '\0';
-      add_to_record(rec, column_names[i++], parsed_line);
-      parsed_line = strtok(NULL, delims);
-    }
-    /* Make sure this wasn't a blank line or some other unusual nonsense. */
-    if (parsed_line == NULL || rec->names[0] != NULL) {
-      /* Resize the names and data arrays to the real size. */
-      rec->names = realloc(rec->names, rec->col_count * sizeof(char *));
-      rec->data = realloc(rec->data, rec->col_count * sizeof(char *));
-      add_record(relation, rec);
-      free(rec);
-    }
-    /* Free the record if this line was junk. */
-    else {
-      free(rec->names);
-      free(rec->data);
-      free(rec);
-    }
-  } while ((bytes_read = getline(&line, &nbytes, fr)) != -1);
+  r_list *relation = init_r_list(column_names);
   /* Clean up. */
-  if (parsed_line != NULL &&parsed_line[0] != '\n')
+  if (parsed_line != NULL && parsed_line[0] != '\n')
     free(parsed_line);
 
+  /* Read the lines and create a record for each entry. */
+  create_records(relation, line, fr);
+  
   fclose(fr);
-
   /* Free the memory created for the column names. */
-  for (i=0;i<relation->records[0].col_count;i++) 
+  for (i=0; i<MAX_COLS; i++) 
     free(column_names[i]);
+  free(column_names);
 
   return relation;
 } /* scan() */

@@ -2,6 +2,7 @@ CFLAGS = -c
 CC = gcc
 ARCHIVER = ar
 LIBLOC = lib/
+HDLOC = -Iinclude/
 LIBNAME = -loas
 OBJS = \
 	src/record.o \
@@ -9,8 +10,10 @@ OBJS = \
 	src/select.o \
 	src/project.o \
 	src/sort.o \
+	src/getline.o \
+	src/getdelim.o
 
-all: src/par src/temp
+all: src/par temp
 
 src/oas_scanner.c src/oas_scanner.h: src/oas_scanner.l
 	flex --header-file=src/oas_scanner.h -P oas_ -o src/oas_scanner.c $<
@@ -22,39 +25,49 @@ bin/par: src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
 	$(CC) $(DEBUG) src/oas_scanner.c src/oas_parser.c -o $@
 	make cleanpar
 
-bin/temp: src/temp.c
-	$(CC) $< -L$(LIBLOC) $(LIBNAME) -o $@
+temp: temp.c
+	$(CC) $< -L$(LIBLOC) $(HDLOC) $(LIBNAME) -o $@
 
 lib/liboas: $(OBJS)
 	$(ARCHIVER) rcs lib/liboas.a $(OBJS)
 	make cleanobjs
 
-bin/tempD: $(OBJS) src/temp.o
-	$(CC) $(DEBUG) $(OBJS) src/temp.o -o $@
+prof: $(OBJS) temp.o
+	$(CC) $(DEBUG) $(OBJS) temp.o -o temp
+	make cleanobjs
+
+tempD: $(OBJS) temp.o
+	$(CC) $(DEBUG) $(OBJS) temp.o -o $@
 
 src/record.o: src/record.c
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
 
 src/select.o: src/select.c
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
 
 src/scan.o: src/scan.c 
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
 
 src/project.o: src/project.c 
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
 
 src/sort.o: src/sort.c 
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
 
-src/temp.o: src/temp.c
-	$(CC) $(CFLAGS) $(DEBUG) $< -o $@
+src/getline.o: src/getline.c 
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
+
+src/getdelim.o: src/getdelim.c 
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
+
+temp.o: temp.c
+	$(CC) $(CFLAGS) $(HDLOC) $(DEBUG) $< -o $@
 
 cleanpar:
 	rm src/oas_scanner.c src/oas_scanner.h src/oas_parser.c src/oas_parser.h
 
 cleantemp:
-	rm -rf src/temp*
+	rm -rf temp*
 
 cleanobjs:
 	rm src/*o

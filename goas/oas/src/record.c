@@ -4,66 +4,100 @@
 
 #include "record.h"
 
-/* This function initializes the memory required for a record and initializs
- * the beginnings of the arrays to NULL (though I can't remember why). Also,
- * we set the column count to 0 */
-record *init_record() {
-  record *rec = malloc(sizeof(record));
-  rec->names = malloc(NUM_COLS * sizeof(char *));
-  rec->data = malloc(NUM_COLS * sizeof(char *));
+unsigned int NUM_COLS;
+unsigned int NUM_RECS;
 
-  /* Make sure the allocations worked. */
-  check_malloc(rec->names,"init_record()");
-  check_malloc(rec->data,"init_record()");
+/* This function initializes the memory required for a record and goes through
+ * each line of the file creating records and adding them to the record array.
+ * relation is a pointer to the relation to be modified, lines is the next line
+ * following the column names in the file pointed to by fr. */
+void create_records(r_list *relation, char *line, FILE *fr) {
+  /* These variables are used for extracting field data from a line and placing
+   * it in the correct record and location. */
+  int c_count = 0;
+  int i=0;
+  char delims[2] = "\t";
+  char *parsed_line = NULL;
 
-  rec->names[0] = NULL;
-  rec->data[0] = NULL;
-  rec->col_count = 0;
+  /* For file reading. */
+  ssize_t bytes_read;
+  size_t nbytes = 512;
+  /* Loop through each line, splitting on '\t' and allocate memory for each
+   * field. */
+  do {
+    /* Initialize memory for this records. */
+    record *rec = malloc(sizeof(record));
+    rec->data = malloc(NUM_COLS * sizeof(char *));
 
-  return rec;
-} /* init_record() */
+    if (rec->data == NULL) {
+      printf("Malloc problem in init_record().\n");
+      exit(-1);
+    }
+    c_count = 0;
+    parsed_line = strtok(line, delims);
+    
+    /* Add each field to the record. */
+    while (parsed_line != NULL && parsed_line[0] != '\n') {
+      if (parsed_line[strlen(parsed_line)-1] == '\n')
+	parsed_line[strlen(parsed_line)-1] = '\0';
 
-/* Adds the strings name and data to the names and data arrays in index
- * loc for record rec. */
-void add_to_record(record *rec, char *name, char *data) {
-  int c_count = rec->col_count;
-  /* Make sure there is room in the arrays for a new column. */
-  if (c_count < NUM_COLS) {
-    rec->names[c_count] = malloc(strlen(name) * sizeof(char) + 1);
-    rec->data[c_count] = malloc(strlen(data) * sizeof(char) + 1);
+      rec->data[c_count] = malloc(strlen(parsed_line) * sizeof(char) + 1);
+      
+      /* Make sure the allocations worked. Don't call check_malloc() because
+       * if there are lots of records there will be too many function calls. */
+      if (rec->data[c_count] == NULL) {
+	printf("Malloc problem in create_record().\n");
+	exit(-1);
+      }
+      strcpy(rec->data[c_count], parsed_line);
+      c_count++;
 
-    check_malloc(rec->names[c_count],"add_to_record()");
-    check_malloc(rec->data[c_count],"add_to_record()");
+      parsed_line = strtok(NULL, delims);
+    }
 
-    strcpy(rec->names[c_count], name);
-    strcpy(rec->data[c_count], data);
-    rec->col_count++;
-  }
-  /* There wasn't room for this columns, resize and add. */
-  else {
-    NUM_COLS*=2;
-    rec->names = realloc(rec->names, sizeof(char *) * NUM_COLS);
-    rec->data = realloc(rec->data, sizeof(char *) * NUM_COLS);
+    /* Make sure this wasn't a blank line or some other unusual nonsense. */
+    if (parsed_line == NULL) {
+      add_record(relation, rec);
+      free(rec);
+    }
+    /* Free the record and the data if this line was junk. Sanity check.*/
+    else {
+      free(rec->data);
+      free(rec);
+    }
+  } while ((bytes_read = getline(&line, &nbytes, fr)) != -1);
 
-    add_to_record(rec, name, data);
-  }
-} /* add_to_record() */
+  NUM_RECS = relation->rec_count;
 
-/* Basic initialization for an r_list. Allocates memory and sets the record
- * count to 0. */
-r_list *init_r_list() {
+  if (parsed_line != NULL && parsed_line[0] != '\n')
+    free(parsed_line);
+} /* create_record() */
+
+/* Basic initialization for an r_list. Allocates memory, sets the record
+ * count to 0, and initializes the column names array. */
+r_list *init_r_list(char **names) {
   r_list *r = malloc(sizeof(r_list));
   check_malloc(r,"init_r_list()");
 
   r->records = malloc(NUM_RECS * sizeof(record));
   check_malloc(r->records,"init_r_list()");
 
+  r->c_names = malloc(NUM_COLS * sizeof(char *));
+  check_malloc(r->c_names,"init_r_list()");
+
+  unsigned int i;
+  for (i=0; i<NUM_COLS; i++) {
+    r->c_names[i] = malloc(strlen(names[i]) * sizeof(char));
+    check_malloc(r->c_names,"init_r_list()");
+    strcpy(r->c_names[i], names[i]);
+  }
+
   r->rec_count = 0;
 
   return r;
 } /* init_r_list() */
 
-/* Adds record r to the list llist. */
+/* Adds record r to the relation list. */
 void add_record(r_list *list, record *r) {
   int r_count = list->rec_count;
   /* Make sure there is room in the array of records. */
@@ -75,44 +109,72 @@ void add_record(r_list *list, record *r) {
   else {
     NUM_RECS*=2;
     list->records = realloc(list->records, sizeof(record) * NUM_RECS);
+    check_malloc(list->records, "add_record()");
     add_record(list, r);
   }
 } /* add_record() */
 
 /* Prints the contents of each record in the list passed as the first
- * parameter. */
+ * parameter freeing memory for the relation as it goes. */
 void print_r_list(r_list *list) {
-  int i,j;
-  for (i=0; i<list->rec_count; i++) {
-    printf("RECORD NUMBER %d:\n",i);
-    for (j=0; j<list->records[i].col_count; j++) {
-      printf("\tNAME:[%s]\tDATA:[%s]\n",list->records[i].names[j],
-  	     list->records[i].data[j]);
-    }
-  }
-} /* print_r_list() */
+  int i,j,k;
 
-/* Frees the memory that was allocated for r_list list and each record. */
-void free_r_list (r_list *list) {
-  int i,j;
-  for (i=0; i<list->rec_count; i++) {
-    /* Free all the strings in this record. */
-    for (j=0; j<list->records[i].col_count; j++) {
-      free(list->records[i].names[j]);
+  /* Print column names */
+  for (i=0; i<NUM_COLS; i++) {
+    if (i != NUM_COLS-1)
+      /* printf(" %s |",list->records[0].names[i]); */
+      printf(" %s |",list->c_names[i]);
+    else
+      /* printf(" %s",list->records[0].names[i]); */
+      printf(" %s",list->c_names[i]);
+  }
+  printf(" \n");
+  for (i=0; i<NUM_COLS; i++) {
+    for (j=0; j<strlen(list->c_names[i])+2; j++)
+      printf("-");
+    if (i != NUM_COLS-1)
+      printf("+");
+  }
+  printf("\n");
+  int len;
+  for (i=0; i<NUM_RECS; i++) {
+    for (j=0; j<NUM_COLS; j++) {
+      len = strlen(list->c_names[j])+1 -
+      	strlen(list->records[i].data[j]);
+      for (k=0; k<len; k++)
+	printf(" ");
+      printf("%s",list->records[i].data[j]);
+      if (j != NUM_COLS-1)
+	printf(" |");
       free(list->records[i].data[j]);
     }
-    /* Free the column array for this record. */
-    free(list->records[i].names);
+    printf("\n");
     free(list->records[i].data);
   }
-  /* Free the records array and the r_list. */
+  for (i=0; i<NUM_COLS; i++)
+    free(list->c_names[i]);
+
+  free(list->c_names);
   free(list->records);
   free(list);
-} /* free_r_list() */
 
+  printf("(%d rows)\n",NUM_RECS);
+  printf("\n");
+} /* print_r_list() */
+
+/* Checks if the pointer array is NULL. If so print errormsg and exit. */
 void check_malloc(void *array, char *errormsg) {
   if (array == NULL) {
     printf("Unable to allocate memory in %s.\n",errormsg);
     exit(-1);
   }
-}
+} /* check_malloc() */
+
+
+/* This is the callback function for sorting integer keys. */
+int int_cmp(const void *a, const void *b) {
+  int *ia = (int *)a;
+  int *ib = (int *)b;
+
+  return *ia - *ib;
+} /* int_cmp() */

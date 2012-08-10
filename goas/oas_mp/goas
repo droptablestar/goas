@@ -1,7 +1,0 @@
-#! /bin/sh
-
-set -e
-
-cat $1 | bin/par
-make -s bin/temp
-bin/temp

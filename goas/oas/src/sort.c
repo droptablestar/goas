@@ -5,11 +5,17 @@
 #include "record.h"
 #include "sort.h"
 
+unsigned int NUM_COLS;
+unsigned int NUM_RECS;
+
+/* The index of each key in relation. */
 unsigned int *key_array;
+
+/* Number of keys in the key array. */
 unsigned int num_keys;
 
-/* Takes a relation and array of keys. Returns the relation with
- * relations->records sorted on those keys. */
+/* Takes a relation, an array of keys, and a sorting order. Returns the relation
+ * with relations->records sorted on those keys. */
 r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
   num_keys = 0;
 
@@ -22,7 +28,7 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
   int i,j,k;
   for(i=0;keys[i];i++) num_keys++;
 
-  key_array = malloc(num_keys * sizeof(int));
+  key_array = malloc(num_keys * sizeof(unsigned int));
   check_malloc(key_array, "sort()");
   
   /* will let us check to see if any keys matched in this relation. */
@@ -31,8 +37,8 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
   /* Find out which index each key is associated with. */
   for (i=0,k=0; i<num_keys; i++) {
     key_array[k] = -1;
-    for (j=0; j<relation->records[0].col_count; j++) {
-      if (!strcmp(keys[i], relation->records[0].names[j])) {
+    for (j=0; j<NUM_COLS; j++) {
+      if (!strcmp(keys[i], relation->c_names[j])) {
 	key_array[k] = j;
 	is_sortable = 1;
 	break;
@@ -48,14 +54,14 @@ r_list *sort(r_list *relation, const char **keys, s_order sort_order) {
   /* There were keys in this projection not actually in the relation. */
   if (k != i) {
     num_keys = k;
-    key_array = realloc(key_array, num_keys * sizeof(int));
+    key_array = realloc(key_array, num_keys * sizeof(unsigned int));
   }
 
   if (is_sortable) {
     if (sort_order == ASC)
-      qsort(relation->records, relation->rec_count, sizeof(record), struct_cmp_asc);
+      qsort(relation->records, NUM_RECS, sizeof(record), struct_cmp_asc);
     else
-      qsort(relation->records, relation->rec_count, sizeof(record), struct_cmp_desc);
+      qsort(relation->records, NUM_RECS, sizeof(record), struct_cmp_desc);
   }
 
   free(key_array);
