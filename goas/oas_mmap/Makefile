@@ -11,7 +11,7 @@ OBJS = \
 	src/project.o \
 	src/sort.o \
 
-all: src/par temp
+all: bin/par temp
 
 src/oas_scanner.c src/oas_scanner.h: src/oas_scanner.l
 	flex --header-file=src/oas_scanner.h -P oas_ -o src/oas_scanner.c $<
@@ -27,9 +27,7 @@ temp: temp.c
 	$(CC) $< -L$(LIBLOC) $(LIBNAME) $(HDLOC) -o $@
 
 lib/liboas: $(OBJS)
-	rm lib/*
 	$(ARCHIVER) rcs lib/liboas.a $(OBJS)
-	make cleanobjs
 
 prof: $(OBJS) temp.o
 	$(CC) $(DEBUG) $(HDLOC) $(OBJS) temp.o -o temp

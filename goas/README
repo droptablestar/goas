@@ -25,3 +25,19 @@ visible. A sample query will look as follows:
 For executing postgres queries a postgres server with a username postgres must
 be available. This is left up to the user to handle. When this is set up cd
 into any of the query directory and execute the desired file.
+
+From scratch the system is built as follows
+make bin/par
+make lib/liboas
+
+At this point queries can be executed as described previously.
+
+A number of sample queries are available in oas_queries/ and pgres_queries
+that rely on tables found in oas_tables/ and pgres tables/, respectively.
+To generate tables for oas from the testing/ directory:
+
+javac OASGen.java
+java OASGen <table-name> <number-of-tuples> > oas_tables/<table-name>
+
+Example (100,000 records):
+java OASGen 100k 100000 > oas_tables/100k
