@@ -1,1 +1,0 @@
-psql -d postgres -c "select unique1, unique2, two, four, ten, twenty, onepercent, tenpercent, twentypercent, stringu1, stringu2, stringu4 from t600k where ten=1 OR ten=2 OR ten=3 OR ten=4 OR ten=5 order by unique1, unique2, two, four, ten, twenty, onepercent, tenpercent, twentypercent, stringu1, stringu2, stringu4;"
