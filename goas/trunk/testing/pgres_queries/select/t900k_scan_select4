@@ -1,0 +1,1 @@
+psql -d postgres -c "select * from t900k where onepercent<48 OR onepercent=90 OR onepercent=20 OR onepercent=50;"

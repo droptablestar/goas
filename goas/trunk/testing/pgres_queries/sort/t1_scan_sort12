@@ -1,0 +1,1 @@
+psql -d postgres -c "select * from t1 order by unique1, unique2, two, four, ten, twenty, onepercent, tenpercent, twentypercent, stringu1, stringu2, stringu4;"

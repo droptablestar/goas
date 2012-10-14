@@ -1,0 +1,1 @@
+psql -d postgres -c "select * from t300k order by unique1;"
