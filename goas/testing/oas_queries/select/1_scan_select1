@@ -1,0 +1,2 @@
+x0:=scan(../testing/oas_tables/1);
+x1:=select(x0,[(two,=,0)]);

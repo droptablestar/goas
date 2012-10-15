@@ -1,0 +1,43 @@
+In this directory you will find the various different versions of the goas
+compiler.
+
+oas: This is the original version.
+oas_mmap: This version using memory mapping.
+oas_omp: This version uses OpenMP
+
+checker-267: This directory contains some executables used for code analysis.
+testing: In here are all items used in the evaluation of the project.
+	 Including queries that were executed and the tables they were run on.
+
+In the src/ directory of each version are the .c files that make up the parser
+as well as the .c files that make up the different operators. These are all
+bundled together in the library found in the lib/ directory. The include/
+directory contains all of the .h files that need to be included to execute
+queries.
+
+To run a query for any of the goas variants cd into the top level directory of
+that variant. This will be the directory where src/ lib/ and include/ are all
+visible. A sample query will look as follows:
+
+./goas ../testing/oas_queries/scan/100k_scan [This will compile the query.]
+./temp [This will execute the query.]
+
+For executing postgres queries a postgres server with a username postgres must
+be available. This is left up to the user to handle. When this is set up cd
+into any of the query directory and execute the desired file.
+
+From scratch the system is built as follows
+make bin/par
+make lib/liboas
+
+At this point queries can be executed as described previously.
+
+A number of sample queries are available in oas_queries/ and pgres_queries
+that rely on tables found in oas_tables/ and pgres tables/, respectively.
+To generate tables for oas from the testing/ directory:
+
+javac OASGen.java
+java OASGen <table-name> <number-of-tuples> > oas_tables/<table-name>
+
+Example (100,000 records):
+java OASGen 100k 100000 > oas_tables/100k
