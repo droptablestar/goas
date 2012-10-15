@@ -1,4 +1,0 @@
-x0:=scan(../testing/oas_tables/600k);
-x1:=select(x0,[(two,=,0)]);
-x2:=project(x1,[unique1]);
-x3:=sort(x2,[unique1],ASC);

@@ -1,1 +1,0 @@
-psql -d postgres -c "select unique1, unique2, two from t300k where twenty<9 OR twenty=18 order by unique1, unique2, two;"
