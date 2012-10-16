@@ -1,1 +1,0 @@
-/usr/bin/gcc   -Wl,-search_paths_first -Wl,-headerpad_max_install_names   CMakeFiles/par.dir/oas_parser.c.o CMakeFiles/par.dir/oas_scanner.c.o  -o par  

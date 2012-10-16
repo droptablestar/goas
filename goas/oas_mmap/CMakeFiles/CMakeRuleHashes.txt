@@ -1,3 +1,0 @@
-# Hashes of file build rules.
-68c1c2179ab2238e190c8c6ef5268d09 oas_parser.c
-2f623bbda16a139b0721fc9f483c5670 oas_scanner.c
