@@ -1,2 +1,0 @@
-/usr/bin/ar cr liboas.a  CMakeFiles/oas.dir/project.c.o CMakeFiles/oas.dir/record.c.o CMakeFiles/oas.dir/scan.c.o CMakeFiles/oas.dir/select.c.o CMakeFiles/oas.dir/sort.c.o
-/usr/bin/ranlib liboas.a
