@@ -1,0 +1,2 @@
+/usr/bin/ar cr lib../lib/oas.a  CMakeFiles/../lib/oas.dir/project.c.o CMakeFiles/../lib/oas.dir/record.c.o CMakeFiles/../lib/oas.dir/scan.c.o CMakeFiles/../lib/oas.dir/select.c.o CMakeFiles/../lib/oas.dir/sort.c.o
+/usr/bin/ranlib lib../lib/oas.a

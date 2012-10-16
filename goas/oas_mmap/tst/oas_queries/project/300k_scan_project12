@@ -1,0 +1,2 @@
+x0:=scan(../testing/oas_tables/300k);
+x1:=project(x0,[unique1,unique2,two,four,ten,twenty,onepercent,tenpercent,twentypercent,stringu1,stringu2,stringu4]);

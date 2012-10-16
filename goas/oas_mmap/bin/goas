@@ -1,5 +1,5 @@
 #! /bin/sh
 set -e
 
-cat $1 | bin/par
+cat $1 | ./par
 make -s temp

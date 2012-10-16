@@ -4,7 +4,7 @@
   #include <string.h>
 
   #include "oas_parser.h"
-  #include "oas_scanner.h"
+///  #include "oas_scanner.h" //doesnt need it 
 
   void add_keys(char *, char *, char *);
   void add_key(char *);
@@ -218,7 +218,7 @@ int main() {
     
     fprintf(fp,"%s",t);
     
-    oas_parse();
+    yyparse();
 
     free(key_list);
     fclose(fp);

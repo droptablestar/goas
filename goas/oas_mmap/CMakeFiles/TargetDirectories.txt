@@ -1,0 +1,2 @@
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/CMakeFiles/bin/par.dir
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/src/CMakeFiles/oas.dir

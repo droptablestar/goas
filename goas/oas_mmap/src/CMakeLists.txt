@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 2.8)
 
-SET(OAS_DIR_LIB "../lib" CACHE STRING "Options: [$ENV{HOME}/oas]")
+SET(OAS_DIR_LIB "/lib" CACHE STRING "Options: [$ENV{HOME}/oas]")
 
 SET(LIBNAME oas)
 

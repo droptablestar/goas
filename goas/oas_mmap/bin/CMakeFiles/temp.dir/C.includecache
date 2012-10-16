@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/project.h
+
+../include/record.h
+sys/types.h
+-
+sys/stat.h
+-
+fcntl.h
+-
+unistd.h
+-
+sys/mman.h
+-
+
+../include/scan.h
+
+../include/select.h
+
+../include/sort.h
+
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/bin/temp.c
+stdio.h
+-
+record.h
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/bin/record.h
+scan.h
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/bin/scan.h
+select.h
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/bin/select.h
+project.h
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/bin/project.h
+sort.h
+/Users/lalanne/MyCode/GitHubProjects/oas/goas/oas_mmap/bin/sort.h
+
