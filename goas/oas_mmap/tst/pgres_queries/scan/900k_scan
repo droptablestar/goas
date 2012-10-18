@@ -1,1 +1,0 @@
-echo 'select * from 900;' | psql -d postgres

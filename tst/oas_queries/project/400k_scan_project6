@@ -1,0 +1,2 @@
+x0:=scan(../tst/oas_tables/400k);
+x1:=project(x0,[unique1,unique2,two,four,ten,twenty]);

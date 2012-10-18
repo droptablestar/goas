@@ -1,0 +1,2 @@
+x0:=scan(../tst/oas_tables/1000k);
+x1:=select(x0,[(onepercent,<,48),|,(onepercent,=,90),|,(onepercent,=,20),|,(onepercent,=,50)]);

@@ -1,0 +1,2 @@
+x0:=scan(../tst/oas_tables/800k);
+x1:=sort(x0,[unique1,unique2,two,four,ten,twenty,onepercent,tenpercent,twentypercent,stringu1,stringu2,stringu4],ASC);

@@ -1,1 +1,0 @@
-psql -d postgres -c "select * from t500k where ten=1 OR ten=2 OR ten=3 OR ten=4 OR ten=5;"
