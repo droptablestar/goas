@@ -5,4 +5,4 @@ LIB_DIR=../lib
 INC_DIR=../include
 LIB_NAME=-loas
 cat $1 | ./par
-gcc -o temp -I${INC_DIR} -L${LIB_DIR} ${LIB_NAME} temp.c
+g++ -o temp -I${INC_DIR} -L${LIB_DIR} ${LIB_NAME} temp.cpp

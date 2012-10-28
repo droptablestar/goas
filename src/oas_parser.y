@@ -52,7 +52,7 @@
 %%
 program:	line {
     int i;
-    fprintf(fp, "\tprint_r_list(%s);\n",$1);
+    fprintf(fp, "\tprintRelation(%s);\n",$1);
     fprintf(fp, "\treturn 0;\n}\n");
     } ;
 
@@ -61,7 +61,7 @@ line:
 
 /* SCAN */
 | line INPUT EQ scan '\n' { 
-    fprintf(fp, "\tr_list *%s = scan(\"%s\");\n",$2,$4);
+    fprintf(fp, "\tRelation *%s = scan(\"%s\");\n",$2,$4);
     $$ = $2;
  }
 
@@ -206,16 +206,17 @@ void add_key(char *key) {
 int main() {
     key_list = malloc(key_size * sizeof(char *));
 
-    fp = fopen("temp.c", "w");
-    char *t = "#include <stdio.h>\n"
+    fp = fopen("temp.cpp", "w");
+    char *t = "#include <iostream>\n"
 	"\n" 
-	"#include \"record.h\"\n" 
-	"#include \"scan.h\"\n"
-	"#include \"select.h\"\n"
-	"#include \"project.h\"\n"
-	"#include \"sort.h\"\n"
+	"#include \"Relation.hpp\"\n" 
+	"#include \"Record.hpp\"\n" 
+	"#include \"Scan.hpp\"\n"
 	"\n"
 	"int main() {\n";
+	/* "#include \"select.h\"\n" */
+	/* "#include \"project.h\"\n" */
+	/* "#include \"sort.h\"\n" */
     
     fprintf(fp,"%s",t);
     

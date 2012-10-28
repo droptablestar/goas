@@ -6,11 +6,9 @@ SET(OAS_DIR_LIB "${PROJECT_SOURCE_DIR}/lib" CACHE STRING "Options: [$ENV{HOME}/o
 SET(LIBNAME oas)
 
 SET(SOURCES
-    project.c
-    record.c
-    scan.c
-    select.c
-    sort.c
+    relation.cpp
+    record.cpp
+    scan.cpp
 )
 
 ADD_LIBRARY(${LIBNAME} STATIC ${SOURCES})

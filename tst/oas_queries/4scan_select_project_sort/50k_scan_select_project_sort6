@@ -1,0 +1,4 @@
+x0:=scan(../tst/oas_tables/50k);
+x1:=select(x0,[(twenty,<,8),|,(twenty,=,9),|,(twenty,=,17)]);
+x2:=project(x1,[unique1,unique2,two,four,ten,twenty]);
+x3:=sort(x2,[unique1,unique2,two,four,ten,twenty],ASC);
