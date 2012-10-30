@@ -19,3 +19,33 @@ add_executable(bin/par
 add_subdirectory(src) 
 INSTALL(TARGETS bin/par  DESTINATION ${OAS_SRC_DIR}/bin)
 
+ADD_CUSTOM_TARGET (distclean @echo cleaning for source distribution)
+  SET(DISTCLEANED
+      cmake.depends
+      cmake.check_depends
+      CMakeCache.txt
+      cmake.check_cache
+      *.cmake
+      Makefile
+      core core.*
+      gmon.out
+     *~
+     CMakeFiles
+     src/CmakeFiles
+     src/Makefile
+     src/*.cmake
+     src/oas_parser.c
+     src/oas_parser.h
+     src/oas_scanner.c
+     src/*.o
+     bin/par
+     bin/temp*
+     lib/liboas.a
+    )
+ADD_CUSTOM_COMMAND(DEPENDS clean
+                   COMMENT "distribution clean"
+		   COMMAND rm
+		   ARGS    -Rf CMakeTmp
+                   ${DISTCLEANED}
+		   TARGET  distclean
+                  )

@@ -1,0 +1,2 @@
+x0:=scan(../tst/oas_tables_text/100);
+x1:=sort(x0,[unique1,unique2,two,four,ten,twenty],ASC);

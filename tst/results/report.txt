@@ -1,0 +1,6 @@
+1_scan                             Success pgres (788.60, 75.00)	Fail goas (37.40, 75.00)
+100_scan                           Success pgres (2225.00, 121.50)	Fail goas (39.80, 121.50)
+1k_scan                            Success pgres (2131.20, 347.00)	Fail goas (57.50, 347.00)
+10k_scan                           Success pgres (2978.10, 2836.40)	Fail goas (247.10, 2836.40)
+50k_scan                           Fail pgres (3921.00, 13504.90)	Fail goas (1211.10, 13504.90)
+100k_scan                          Fail pgres (5136.50, 26405.70)	Fail goas (2781.80, 26405.70)

@@ -1,0 +1,2 @@
+x0:=scan(../tst/oas_tables_text/500k);
+x1:=select(x0,[(twenty,<,9),|,(twenty,=,18)]);

@@ -1,2 +1,0 @@
-x0:=scan(../tst/oas_tables/900k);
-x1:=select(x0,[(ten,=,1),|,(ten,=,2),|,(ten,=,3),|,(ten,=,4),|,(ten,=,5)]);

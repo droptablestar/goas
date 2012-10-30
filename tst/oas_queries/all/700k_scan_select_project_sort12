@@ -1,4 +1,0 @@
-x0:=scan(../tst/oas_tables/700k);
-x1:=select(x0,[(ten,=,0),|,(ten,=,2),|,(ten,=,3),|,(ten,=,4),|,(ten,=,5)]);
-x2:=project(x1,[unique1,unique2,two,four,ten,twenty,onepercent,tenpercent,twentypercent,stringu1,stringu2,stringu4]);
-x3:=sort(x2,[unique1,unique2,two,four,ten,twenty,onepercent,tenpercent,twentypercent,stringu1,stringu2,stringu4],ASC);
