@@ -3,6 +3,10 @@ import commands,os,time,re,sys
 RUNS = 10
 
 def main():
+    with open('results/r_times.txt','a') as f:
+        pass
+    with open('results/c_times.txt','a') as f:
+        pass
     if len(sys.argv) < 2:
         print 'Enter operator(s) to test (scan, select, project, sort, all, full)'
         exit()
@@ -49,7 +53,7 @@ def main():
                 print dirN,name, i
                 os.system('purge')
                 c_times.append(commands.getoutput('time ./goas ../tst/'+dirN+'/'+name))
-                time.sleep(.05)
+                time.sleep(.3)
                 r_times.append(commands.getoutput('time ./temp > /dev/null'))
                 time.sleep(.02)
                 os.remove('temp')

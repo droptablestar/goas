@@ -1,1 +1,1 @@
-x0:=scan(../tst/oas_tables/500k);
+x0:=scan(../tst/oas_tables_binary/500k);

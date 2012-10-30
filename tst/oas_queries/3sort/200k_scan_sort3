@@ -1,2 +1,2 @@
-x0:=scan(../tst/oas_tables/200k);
+x0:=scan(../tst/oas_tables_binary/200k);
 x1:=sort(x0,[unique1,unique2,two],ASC);
