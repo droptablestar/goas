@@ -6,8 +6,8 @@ SET(OAS_DIR_LIB "${PROJECT_SOURCE_DIR}/lib" CACHE STRING "Options: [$ENV{HOME}/o
 SET(LIBNAME oas)
 
 SET(SOURCES
-    relation.cpp
-    record.cpp
+    Relation.cpp
+    Record.cpp
     scan.cpp
     MMapLinux.cpp
     Meta.cpp
