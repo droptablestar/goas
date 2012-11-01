@@ -227,21 +227,37 @@ public:
 	    string stringu2 = cycle((int) unique2);
 	    string stringu4 = cycle((int) twenty);
 
+        cout<<unique1<<"\t";
 	    r.setData(to_string(unique1),meta.getSize(j++));
+        cout<<unique2<<"\t";
 	    r.setData(to_string(unique2),meta.getSize(j++));
+        cout<<two<<"\t";
 	    r.setData(to_string(two),meta.getSize(j++));
+        cout<<four<<"\t";
 	    r.setData(to_string(four),meta.getSize(j++));
+        cout<<ten<<"\t";
 	    r.setData(to_string(ten),meta.getSize(j++));
+        cout<<twenty<<"\t";
 	    r.setData(to_string(twenty),meta.getSize(j++));
+        cout<<onePercent<<"\t";
 	    r.setData(to_string(onePercent),meta.getSize(j++));
+        cout<<tenPercent<<"\t";
 	    r.setData(to_string(tenPercent),meta.getSize(j++));
+        cout<<twentyPercent<<"\t";
 	    r.setData(to_string(twentyPercent),meta.getSize(j++));
+        cout<<fiftyPercent<<"\t";
 	    r.setData(to_string(fiftyPercent),meta.getSize(j++));
+        cout<<unique3<<"\t";
 	    r.setData(to_string(unique3),meta.getSize(j++));
+        cout<<evenOnePercent<<"\t";
 	    r.setData(to_string(evenOnePercent),meta.getSize(j++));
+        cout<<oddOnePercent<<"\t";
 	    r.setData(to_string(oddOnePercent),meta.getSize(j++));
+        cout<<stringu1<<"\t";
 	    r.setData(stringu1,meta.getSize(j++));
+        cout<<stringu2<<"\t";
 	    r.setData(stringu2,meta.getSize(j++));
+        cout<<stringu4<<"\t";
 	    r.setData(stringu4,meta.getSize(j++));
 
 	    meta.addToNumBytes(sizeof(int)); meta.addToNumBytes(sizeof(int));
@@ -252,7 +268,9 @@ public:
 	    meta.addToNumBytes(sizeof(int)); meta.addToNumBytes(sizeof(int));
 	    meta.addToNumBytes(sizeof(int)); meta.addToNumBytes(stringu1.length()+1);
 	    meta.addToNumBytes(stringu2.length()+1); meta.addToNumBytes(stringu4.length()+1);
+
 	    this->relation.addRecord(r);
+        cout<<endl;
 	}
     }
 
