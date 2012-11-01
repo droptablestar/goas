@@ -9,6 +9,8 @@ SET(SOURCES
     relation.cpp
     record.cpp
     scan.cpp
+    MMapLinux.cpp
+    Meta.cpp
 )
 
 ADD_LIBRARY(${LIBNAME} STATIC ${SOURCES})
