@@ -3,6 +3,6 @@
 
 #include "Relation.hpp"
 
-extern Relation* scan(const char *);
+void scan(const char *, Relation& relation);
 
 #endif /*!_SCAN_H_*/
