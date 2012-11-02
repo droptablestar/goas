@@ -8,6 +8,14 @@ Meta& Relation::get_meta(){
     return meta;    
 }
 
+void Relation::addRecord(Record* rec) {
+    this->records.push_back(rec);
+}
+
+Record* Relation::getRecord(unsigned int position) {
+    return this->records.at(position);
+}
+
 unsigned short Relation::getNumberOfColumns() {
     return meta.number_of_columns;
 }
@@ -19,13 +27,6 @@ char Relation::getColumnType(unsigned int position) {
 }
 string Relation::getColumnName(unsigned int position) {
     return meta.column_names[position];
-}
-Record* Relation::getRecord(unsigned int position) {
-    return this->records.at(position);
-}
-
-void Relation::addRecord(Record* rec) {
-    this->records.push_back(rec);
 }
 
 void Relation::print(){

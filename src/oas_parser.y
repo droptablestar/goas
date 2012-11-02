@@ -52,7 +52,7 @@
 %%
 program:	line {
     int i;
-    fprintf(fp, "\tprintRelation(%s);\n",$1);
+    fprintf(fp, "\%s.print();\n",$1);
     fprintf(fp, "\treturn 0;\n}\n");
     } ;
 
@@ -61,7 +61,7 @@ line:
 
 /* SCAN */
 | line INPUT EQ scan '\n' { 
-    fprintf(fp, "\tRelation *%s = scan(\"%s\");\n",$2,$4);
+    fprintf(fp, "\tRelation %s;\n\tscan(\"%s\",%s);\n",$2,$4,$2);
     $$ = $2;
  }
 

@@ -1,7 +1,7 @@
 
 #include "MMapLinux.hpp"
 
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <stdio.h>
 #include <fcntl.h>
@@ -11,7 +11,7 @@
 
 using namespace std;
 
-string read_string_type(char* &s){
+inline string read_string_type(char* &s){
     char raw_data;
     vector<char> data;
  
@@ -72,19 +72,19 @@ void MMapLinux::set_meta(Meta& meta){
 
 void MMapLinux::set_relation(Relation& relation){
     for(int i=0; i<relation.get_meta().number_of_rows; ++i){
-	    Record* rec = new Record;
+        Record* rec = new Record;
         for(int j=0; j<relation.get_meta().number_of_columns; ++j){
             if(relation.get_meta().column_types[j]==0) {
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
                 data = data + sizeof(number);
-		        rec->addElement(to_string(number));
-	        }
-	        else if(relation.get_meta().column_types[j]==1){
-		        rec->addElement(read_string_type(data));
-	        }
+                rec->data.push_back(to_string(number));
+            }
+            else if(relation.get_meta().column_types[j]==1){
+                rec->data.push_back(read_string_type(data));
+            }
         }
-	    relation.addRecord(rec);//passing the pointer is much more efficient
+        relation.addRecord(rec);//passing the pointer is much more efficient
     }
 }
 

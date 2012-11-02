@@ -9,8 +9,6 @@ public:
     void addElement(std::string data);
     std::string getElement(unsigned int position);
     void print();
-
-private:
     std::vector<std::string> data;
 };
 
