@@ -3,12 +3,13 @@
 
 #include <vector>
 #include <string>
+#include "Element.hpp"
 
 class Record {
 public:
-    void addElement(std::string data);
-    std::string getElement(unsigned int position);
-    void print();
+    void addElement(std::string);
+    std::string getElement(unsigned int);
+    // void print();
     std::vector<std::string> data;
 };
 

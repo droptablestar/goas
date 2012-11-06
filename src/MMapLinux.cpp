@@ -11,7 +11,7 @@
 
 using namespace std;
 
-inline string read_string_type(char* &s){
+string read_string_type(char* &s){
     char raw_data;
     vector<char> data;
  
@@ -75,13 +75,24 @@ void MMapLinux::set_relation(Relation& relation){
         Record* rec = new Record;
         for(int j=0; j<relation.get_meta().number_of_columns; ++j){
             if(relation.get_meta().column_types[j]==0) {
+                /* TODO: this isn't safe. needs some kind of bounds check.
+                   also wastes space */
+                char snum[10];
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
-                data = data + sizeof(number);
-                rec->data.push_back(to_string(number));
+                sprintf(snum, "%d\0", number);
+                data = data + sizeof(int);
+                rec->data.push_back(snum);
             }
             else if(relation.get_meta().column_types[j]==1){
-                rec->data.push_back(read_string_type(data));
+                size_t length = 0;
+                char raw_data = data[length];
+
+                while(raw_data!='\0')
+                    raw_data = data[++length];
+
+                rec->data.push_back(string(data, length));
+                data = data + (++length);
             }
         }
         relation.addRecord(rec);//passing the pointer is much more efficient
