@@ -1,5 +1,7 @@
 
 #include "MMapLinux.hpp"
+#include "Record.hpp"
+#include "Relation.hpp"
 
 #include <string>
 #include <iostream>
@@ -78,13 +80,13 @@ void MMapLinux::set_relation(Relation& relation){
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
                 data = data + sizeof(number);
-		        rec->addElement(to_string(number));
+		        rec->add_element(to_string(number));
 	        }
 	        else if(relation.get_meta().column_types[j]==1){
-		        rec->addElement(read_string_type(data));
+		        rec->add_element(read_string_type(data));
 	        }
         }
-	    relation.addRecord(rec);//passing the pointer is much more efficient
+	    relation.add_record(rec);//passing the pointer is much more efficient
     }
 }
 

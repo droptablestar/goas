@@ -1,8 +1,8 @@
-#ifndef _SCAN_H_
-#define _SCAN_H_
+#ifndef SCAN_QQW9E8F9WEH98HWFM0 
+#define SCAN_QQW9E8F9WEH98HWFM0
 
-#include "Relation.hpp"
+class Relation;
 
 void scan(const char *, Relation& relation);
 
-#endif /*!_SCAN_H_*/
+#endif //SCAN_QQW9E8F9WEH98HWFM0

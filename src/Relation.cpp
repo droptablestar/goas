@@ -1,4 +1,6 @@
+
 #include "Relation.hpp"
+#include "Record.hpp"
 
 #include <iostream>
 
@@ -8,41 +10,41 @@ Meta& Relation::get_meta(){
     return meta;    
 }
 
-unsigned short Relation::getNumberOfColumns() {
+unsigned short Relation::get_number_of_columns() const{
     return meta.number_of_columns;
 }
-unsigned int Relation::getNumberOfRows() {
+unsigned int Relation::get_number_of_rows() const{
     return meta.number_of_rows;
 }
-char Relation::getColumnType(unsigned int position) {
+char Relation::get_column_type(unsigned int position) const{
     return meta.column_types[position];
 }
-string Relation::getColumnName(unsigned int position) {
+string Relation::get_column_name(unsigned int position) const{
     return meta.column_names[position];
 }
-Record* Relation::getRecord(unsigned int position) {
+Record* Relation::get_record(unsigned int position) const{
     return this->records.at(position);
 }
 
-void Relation::addRecord(Record* rec) {
+void Relation::add_record(Record* rec){
     this->records.push_back(rec);
 }
 
-void Relation::print(){
-    unsigned short num_cols = getNumberOfColumns();
-    unsigned int num_rows = getNumberOfRows();
+void Relation::print() const{
+    unsigned short num_cols = get_number_of_columns();
+    unsigned int num_rows = get_number_of_rows();
     int i,j;
 
     for (i=0; i<num_cols; i++) {
 	if (i != num_cols-1)
-	    cout<<" "<< getColumnName(i)<<" |";
+	    cout<<" "<< get_column_name(i)<<" |";
 	else
-	    cout<<" "<<getColumnName(i);
+	    cout<<" "<<get_column_name(i);
     }
     cout<<endl;
 
     for (i=0; i<num_cols; i++) {
-    	for (j=0; j<getColumnName(i).length()+2; j++)
+    	for (j=0; j<get_column_name(i).length()+2; j++)
     	    cout<<"-";
     	if (i != num_cols-1)
     	    cout<<"+";
@@ -53,10 +55,10 @@ void Relation::print(){
     unsigned short len,k;
     for (i=0; i<num_rows; i++) {
     	for (j=0; j<num_cols; j++) {
-    	    len = (getColumnName(j).length() + 1) - getRecord(i)->getElement(j).length();
+    	    len = (get_column_name(j).length() + 1) - get_record(i)->get_element(j).length();
     	    for (k=0; k<len; k++)
     	    	cout<<" ";
-    	    cout<<getRecord(i)->getElement(j);
+    	    cout<<get_record(i)->get_element(j);
     	    if (j != num_cols-1)
     		cout<<" |";
     	}

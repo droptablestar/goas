@@ -1,7 +1,6 @@
-#ifndef _RELATION_H_
-#define _RELATION_H_
+#ifndef RELATION_Q9HF9QWHEF98WHEF9
+#define RELATION_Q9HF9QWHEF98WHEF9
 
-#include "Record.hpp"
 #include "Meta.hpp"
 
 #include <vector>
@@ -10,16 +9,18 @@
 #define INT 0
 #define STRING 1
 
+class Record;
+
 class Relation {
     public:
-        void addRecord(Record* rec);
-        unsigned short getNumberOfColumns();
-        unsigned int getNumberOfRows();
-        char getColumnType(unsigned int);
-        std::string getColumnName(unsigned int);
-        Record* getRecord(unsigned int);
+        void add_record(Record* rec);
+        unsigned short get_number_of_columns() const;
+        unsigned int get_number_of_rows() const;
+        char get_column_type(unsigned int) const;
+        std::string get_column_name(unsigned int) const;
+        Record* get_record(unsigned int) const;
     
-        void print();
+        void print() const;
         Meta& get_meta();
 
 
@@ -28,4 +29,4 @@ class Relation {
         Meta meta;
 };
 
-#endif /*_RELATION_H_*/
+#endif //RELATION_Q9HF9QWHEF98WHEF9

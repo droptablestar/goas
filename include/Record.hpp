@@ -1,17 +1,17 @@
-#ifndef _RECORD_H_
-#define _RECORD_H_
+#ifndef RECORD_Q987WHE9Q8WHEF98HWEF 
+#define RECORD_Q987WHE9Q8WHEF98HWEF
 
 #include <vector>
 #include <string>
 
 class Record {
 public:
-    void addElement(std::string data);
-    std::string getElement(unsigned int position);
+    void add_element(std::string data);
+    std::string get_element(unsigned int position);
     void print();
 
 private:
     std::vector<std::string> data;
 };
 
-#endif /*_RECORD_H_*/
+#endif //RECORD_Q987WHE9Q8WHEF98HWEF
