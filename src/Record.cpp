@@ -20,3 +20,4 @@ void Record::print(){
         });
     cout<<endl;
 }
+

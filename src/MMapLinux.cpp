@@ -3,7 +3,7 @@
 #include "Record.hpp"
 #include "Relation.hpp"
 
-#include <string>
+#include <string.h>
 #include <iostream>
 #include <stdio.h>
 #include <fcntl.h>
@@ -74,19 +74,30 @@ void MMapLinux::set_meta(Meta& meta){
 
 void MMapLinux::set_relation(Relation& relation){
     for(int i=0; i<relation.get_meta().number_of_rows; ++i){
-	    Record* rec = new Record;
+        Record* rec = new Record;
         for(int j=0; j<relation.get_meta().number_of_columns; ++j){
             if(relation.get_meta().column_types[j]==0) {
+                /* TODO: this isn't safe. needs some kind of bounds check.
+                   also wastes space */
+                char snum[10];
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
-                data = data + sizeof(number);
-		        rec->add_element(to_string(number));
-	        }
-	        else if(relation.get_meta().column_types[j]==1){
-		        rec->add_element(read_string_type(data));
-	        }
+                sprintf(snum, "%d\0", number);
+                data = data + sizeof(int);
+                rec->data.push_back(snum);
+            }
+            else if(relation.get_meta().column_types[j]==1){
+                size_t length = 0;
+                char raw_data = data[length];
+
+                while(raw_data!='\0')
+                    raw_data = data[++length];
+
+                rec->data.push_back(string(data, length));
+                data = data + (++length);
+            }
         }
-	    relation.add_record(rec);//passing the pointer is much more efficient
+        relation.add_record(rec);//passing the pointer is much more efficient
     }
 }
 

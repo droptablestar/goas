@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include "Element.hpp"
 
 class Record {
 public:
