@@ -13,20 +13,20 @@
 
 using namespace std;
 
-string read_string_type(char* &s){
-    char raw_data;
-    vector<char> data;
- 
-    memcpy(&raw_data, s, sizeof(raw_data));
-    s = s + sizeof(raw_data);
-
-    while(raw_data!='\0'){
-        data.push_back(raw_data);
-        memcpy(&raw_data, s, sizeof(raw_data));
-        s = s + sizeof(raw_data);
+unsigned int get_size_of_string(const char* s){
+    unsigned int length = 0;
+    while(*s!='\0'){
+        ++length;    
+        ++s;
     }
-    string name(data.begin(), data.end());
-    return name;
+    return length + 1;
+}
+
+string read_string_type(char* &s){
+    unsigned int size = get_size_of_string(s);
+    string field(s, size);
+    s = s + size;
+    return field;
 }
 
 MMapLinux::MMapLinux(const string file):file(file){}
@@ -68,6 +68,7 @@ void MMapLinux::set_meta(Meta& meta){
         meta.column_types.push_back(type_column);
 
         string column_name = read_string_type(data);
+
         meta.column_names.push_back(column_name);
     }
 }
@@ -84,17 +85,10 @@ void MMapLinux::set_relation(Relation& relation){
                 memcpy(&number, data, sizeof(number));
                 sprintf(snum, "%d\0", number);
                 data = data + sizeof(int);
-                rec->data.push_back(snum);
+                rec->add_element(snum);
             }
             else if(relation.get_meta().column_types[j]==1){
-                size_t length = 0;
-                char raw_data = data[length];
-
-                while(raw_data!='\0')
-                    raw_data = data[++length];
-
-                rec->data.push_back(string(data, length));
-                data = data + (++length);
+                rec->add_element(read_string_type(data));
             }
         }
         relation.add_record(rec);//passing the pointer is much more efficient

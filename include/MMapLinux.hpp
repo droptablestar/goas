@@ -4,7 +4,7 @@
 
 #include <string>
 
-class Meta;
+struct Meta;
 class Relation;
 
 class MMapLinux{
