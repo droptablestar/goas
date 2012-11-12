@@ -1,9 +1,11 @@
 
 #include "MMapLinux.hpp"
 #include "Record.hpp"
+#include "Record1.hpp"
 #include "Relation.hpp"
 
 #include <string.h>
+#include <stdlib.h>
 #include <iostream>
 #include <stdio.h>
 #include <fcntl.h>
@@ -30,6 +32,16 @@ string read_string_type(char* &s){
 }
 
 MMapLinux::MMapLinux(const string file):file(file){}
+
+unsigned int number_of_digits_in_an_integer(int integer){
+    unsigned int number_of_digits = 0;
+
+    while(integer){
+        integer = integer/10;
+        ++number_of_digits;
+    }
+    return number_of_digits;
+}
 
 
 void MMapLinux::open_file(){
@@ -75,20 +87,35 @@ void MMapLinux::set_meta(Meta& meta){
 
 void MMapLinux::set_relation(Relation& relation){
     for(int i=0; i<relation.get_meta().number_of_rows; ++i){
-        Record* rec = new Record;
+        Record1* rec = new Record1;
         for(int j=0; j<relation.get_meta().number_of_columns; ++j){
             if(relation.get_meta().column_types[j]==0) {
-                /* TODO: this isn't safe. needs some kind of bounds check.
-                   also wastes space */
-                char snum[10];
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
-                sprintf(snum, "%d\0", number);
+
+                //unsigned int size = number_of_digits_in_an_integer(number);
+                //char* snum = new char[size];
+                //sprintf(snum, "%d\0", number);
                 data = data + sizeof(int);
-                rec->add_element(snum);
+                
+                Field* field = new Field(number);
+                
+             //   cout<<"field: ["<<field->get_field()<<"]"<<" size ["<<field->get_size()<<"]"<<endl;
+
+                rec->add_element(field);
             }
             else if(relation.get_meta().column_types[j]==1){
-                rec->add_element(read_string_type(data));
+
+                unsigned int size = get_size_of_string(data);
+                char* snum = new char[size];
+                 memcpy(snum, data, size);
+                data = data + size;
+
+                Field* field = new Field(size,snum);
+
+            //    cout<<"field: ["<<field->get_field()<<"]"<<" size ["<<field->get_size()<<"]"<<endl;
+                rec->add_element(field);
+
             }
         }
         relation.add_record(rec);//passing the pointer is much more efficient

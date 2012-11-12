@@ -10,22 +10,23 @@
 #define STRING 1
 
 class Record;
+class Record1;
 
 class Relation {
     public:
-        void add_record(Record* rec);
+        void add_record(Record1* rec);
         unsigned short get_number_of_columns() const;
         unsigned int get_number_of_rows() const;
         char get_column_type(unsigned int) const;
         std::string get_column_name(unsigned int) const;
-        Record* get_record(unsigned int) const;
+        Record1* get_record(unsigned int) const;
     
         void print() const;
         Meta& get_meta();
 
 
     private:
-        std::vector<Record*> records;
+        std::vector<Record1*> records;
         Meta meta;
 };
 

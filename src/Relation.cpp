@@ -1,6 +1,7 @@
 
 #include "Relation.hpp"
 #include "Record.hpp"
+#include "Record1.hpp"
 
 #include <iostream>
 
@@ -22,11 +23,11 @@ char Relation::get_column_type(unsigned int position) const{
 string Relation::get_column_name(unsigned int position) const{
     return meta.column_names[position];
 }
-Record* Relation::get_record(unsigned int position) const{
+Record1* Relation::get_record(unsigned int position) const{
     return this->records.at(position);
 }
 
-void Relation::add_record(Record* rec){
+void Relation::add_record(Record1* rec){
     this->records.push_back(rec);
 }
 
@@ -52,15 +53,23 @@ void Relation::print() const{
 
     cout<<endl;
 
+    //cout<<get_record(0)->get_element(0)->get_field()<<endl;
     unsigned short len,k;
     for (i=0; i<num_rows; i++) {
     	for (j=0; j<num_cols; j++) {
-    	    len = (get_column_name(j).length() + 1) - get_record(i)->get_element(j).length();
+            Field* field = get_record(i)->get_element(j);
+    	    len = (get_column_name(j).length() + 1) - field->get_size();
     	    for (k=0; k<len; k++)
     	    	cout<<" ";
-    	    cout<<get_record(i)->get_element(j);
+            if(field->is_integer){
+    	        cout<<field->n_field;
+            }
+            else{
+    	        cout<<field->field;
+            }
     	    if (j != num_cols-1)
     		cout<<" |";
+
     	}
     	cout<<endl;
     }
