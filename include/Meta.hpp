@@ -6,7 +6,7 @@
 #include <string>
 
 struct Meta{
-    void print();
+    void print() const;
         
     unsigned short number_of_columns;
     unsigned int number_of_rows;

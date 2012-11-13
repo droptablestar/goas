@@ -12,6 +12,7 @@ SET(SOURCES
     scan.cpp
     MMapLinux.cpp
     Meta.cpp
+    StringUtilities.cpp
 )
 
 ADD_LIBRARY(${LIBNAME} STATIC ${SOURCES})
