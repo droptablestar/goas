@@ -5,7 +5,7 @@ Field::Field(const unsigned int size, const char* field):
                                     size(size), field(field), n_field(-1),
                                     is_integer(false){}
 
-Field::Field(const int field):n_field(field), field(NULL), size(0),
+Field::Field(const int field):n_field(field), field(0), size(0),
                             is_integer(true){}
 
 const char* Field::get_field() const{
