@@ -34,9 +34,9 @@ void Relation::add_record(Record1* rec){
 void Relation::print() const{
     unsigned short num_cols = get_number_of_columns();
     unsigned int num_rows = get_number_of_rows();
-    int i,j;
-
-    for (i=0; i<num_cols; i++) {
+    cout<<"Hello"<<endl;
+    
+    for (int i=0; i<num_cols; i++) {
 	if (i != num_cols-1)
 	    cout<<" "<< get_column_name(i)<<" |";
 	else
@@ -44,22 +44,21 @@ void Relation::print() const{
     }
     cout<<endl;
 
-    for (i=0; i<num_cols; i++) {
-    	for (j=0; j<get_column_name(i).length()+2; j++)
+    for (int i=0; i<num_cols; i++) {
+    	for (int j=0; j<get_column_name(i).length()+2; j++)
     	    cout<<"-";
     	if (i != num_cols-1)
     	    cout<<"+";
     }
-
     cout<<endl;
 
-    //cout<<get_record(0)->get_element(0)->get_field()<<endl;
     unsigned short len,k;
-    for (i=0; i<num_rows; i++) {
-    	for (j=0; j<num_cols; j++) {
+
+    for (int i=0; i<num_rows; i++) {
+    	for (int j=0; j<num_cols; j++) {
             Field* field = get_record(i)->get_element(j);
     	    len = (get_column_name(j).length() + 1) - field->get_size();
-    	    for (k=0; k<len; k++)
+    	    for (int k=0; k<len; k++)
     	    	cout<<" ";
             if(field->is_integer){
     	        cout<<field->n_field;
@@ -74,7 +73,6 @@ void Relation::print() const{
     	cout<<endl;
     }
     cout<<"("<<num_rows<<" rows)"<<endl;
-
 }
 
 
