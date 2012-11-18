@@ -35,7 +35,6 @@ def calculateTime(output):
     time = outputArray[1]
     print 'time [%s]' % time
     minutes = float(time[0])
-    #seconds = float(time[2:8])
     seconds=float(time[time.find("m")+1:time.find("s")])
     timePrinted = str(int(minutes*60*1000 + seconds*1000))
     print 'timePrinted [%s]' % timePrinted
@@ -48,22 +47,23 @@ def executingBenchmarkNTimes(n, FILE, configurationCommand):
     print 'Executing times: %s' % n
     list = ''
     for i in range(n):
+        os.system('sleep 5')
         output = executingExampleND(FILE)
-        #output = executingExampleC(FILE)
         list = list+' '+str(calculateTime(output))
     lineToPrint = ' \"'+configurationCommand+'\" '+list+'\n'
     write(FILE, lineToPrint)
 
 def executingExampleND(FILE):
     print 'Executing Example ND: ' 
-    os.system('purge')
-    output = commands.getoutput("time ./temp > /dev/null")
+    bash_command = "bash -c \"time ./temp > /dev/null\""
+    print '[%s]' % bash_command
+    output = commands.getoutput(bash_command)
     print 'output [%s]' % output 
     return output
 
 def configuring(configurationCommand):
     print 'configuring: [%s]' % configurationCommand
-    os.system('purge')
+    os.system('sleep 5')
     output = commands.getoutput(configurationCommand)
     print '%s' % output
     
