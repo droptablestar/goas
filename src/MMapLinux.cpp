@@ -4,6 +4,9 @@
 #include "Record1.hpp"
 #include "Relation.hpp"
 #include "StringUtilities.hpp"
+#include "Field.hpp"
+#include "RawStringField.hpp"
+#include "IntegerField.hpp"
 
 #include <string.h>
 #include <stdlib.h>
@@ -40,50 +43,53 @@ void MMapLinux::open_file(){
 }
 
 void MMapLinux::set_meta(Meta& meta){
+    unsigned short n_columns;
+    memcpy(&n_columns, data, sizeof(n_columns));
+    data = data + sizeof(n_columns);
+    meta.set_number_of_columns(n_columns);
 
-    memcpy(&meta.number_of_columns, data, sizeof(meta.number_of_columns));
-    data = data + sizeof(meta.number_of_columns);
-    memcpy(&meta.number_of_rows, data, sizeof(meta.number_of_rows));
-    data = data + sizeof(meta.number_of_rows);
+    unsigned int n_rows;
+    memcpy(&n_rows, data, sizeof(n_rows));
+    data = data + sizeof(n_rows);
+    meta.set_number_of_rows(n_rows);
 
-
-    for(int i = 0; i< meta.number_of_columns; ++i){
+    for(int i = 0; i< n_columns; ++i){
         char type_column;
         memcpy(&type_column, data, sizeof(type_column));
         data = data + sizeof(type_column);
-        meta.column_types.push_back(type_column);
+        meta.add_column_type(type_column);
 
         string column_name = StringUtilities::read_string_type(data);
-
-        meta.column_names.push_back(column_name);
+        meta.add_column_name(column_name);
     }
 }
 
 void MMapLinux::set_relation(Relation& relation){
-    for(int i=0; i<relation.get_meta().number_of_rows; ++i){
-        Record1* rec = new Record1;
-        for(int j=0; j<relation.get_meta().number_of_columns; ++j){
-            if(relation.get_meta().column_types[j]==0) {
+    Meta& meta = relation.get_meta();
+    unsigned int number_of_rows = meta.number_of_rows();
+    for(int i=0; i<number_of_rows; ++i){
+        unsigned int number_of_columns = meta.number_of_columns();
+        Record1 record(number_of_columns);
+
+        for(int j=0; j<number_of_columns; ++j){
+            if(meta.get_type(j)==0) {
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
-
                 data = data + sizeof(int);
-                Field* field = new Field(number);
 
-                rec->add_element(field);
+                record.add(new IntegerField(number));
             }
-            else if(relation.get_meta().column_types[j]==1){
+            else if(meta.get_type(j)==1){
+                const unsigned int size = StringUtilities::get_size_of_string(data);
+                RawStringField* field = new RawStringField(size);
 
-                unsigned int size = StringUtilities::get_size_of_string(data);
-                char* snum = new char[size];
-                memcpy(snum, data, size);
+                memcpy(field->raw_ptr(), data, size);
                 data = data + size;
 
-                Field* field = new Field(size,snum);
-                rec->add_element(field);
+                record.add(field);
             }
         }
-        relation.add_record(rec);//passing the pointer is much more efficient
+        relation.add_record(record);
     }
 }
 
