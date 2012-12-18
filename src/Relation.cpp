@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void Relation::add_record(Record1& rec){
+void Relation::add_record(Record& rec){
     this->records.push_back(rec);
 }
 
