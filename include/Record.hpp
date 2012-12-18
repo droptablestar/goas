@@ -9,7 +9,7 @@
 
 class Record{
     public:
-        Record1(const unsigned int size){
+        Record(const unsigned int size){
             /*not further allocation of memory after this
              avoid wastefull copies, size is the number of 
              columns in the relation*/
