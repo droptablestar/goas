@@ -2,7 +2,7 @@
 #define RELATION_Q9HF9QWHEF98WHEF9
 
 #include "Meta.hpp"
-#include "Record1.hpp"
+#include "Record.hpp"
 #include "Field.hpp"
 
 #include <vector>
@@ -15,13 +15,13 @@ class Record;
 
 class Relation{
     public:
-        void add_record(Record1& rec);
+        void add_record(Record& rec);
         Meta& get_meta();
         void print() const;
         void set_size();
 
     private:
-        std::vector<Record1> records;
+        std::vector<Record> records;
         Meta meta;
 };
 
