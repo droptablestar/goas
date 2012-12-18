@@ -1,17 +1,12 @@
 
 #include "StringUtilities.hpp"
 
-#include <string>
+#include <string.h>
 
 using namespace std;
 
 unsigned int StringUtilities::get_size_of_string(const char* s){
-    unsigned int length = 0;
-    while(*s!='\0'){
-        ++length;    
-        ++s;
-    }
-    return length + 1;
+    return strlen(s) + 1;
 }
 
 string StringUtilities::read_string_type(char* &s){
