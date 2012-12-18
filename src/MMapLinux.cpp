@@ -1,21 +1,15 @@
 
 #include "MMapLinux.hpp"
 #include "Record.hpp"
-#include "Record1.hpp"
 #include "Relation.hpp"
 #include "StringUtilities.hpp"
-#include "Field.hpp"
 #include "RawStringField.hpp"
 #include "IntegerField.hpp"
 
 #include <string.h>
-#include <stdlib.h>
-#include <iostream>
-#include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <vector>
 
 using namespace std;
 
@@ -69,7 +63,7 @@ void MMapLinux::set_relation(Relation& relation){
     unsigned int number_of_rows = meta.number_of_rows();
     for(int i=0; i<number_of_rows; ++i){
         unsigned int number_of_columns = meta.number_of_columns();
-        Record1 record(number_of_columns);
+        Record record(number_of_columns);
 
         for(int j=0; j<number_of_columns; ++j){
             if(meta.get_type(j)==0) {
