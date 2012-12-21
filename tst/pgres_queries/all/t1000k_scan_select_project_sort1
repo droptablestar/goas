@@ -1,1 +1,0 @@
-psql -d postgres -c "select unique1 from t1000k where two=1 order by unique1;"

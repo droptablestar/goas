@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select * from t10k where onepercent<48 OR onepercent=90 OR onepercent=20 OR onepercent=50;"

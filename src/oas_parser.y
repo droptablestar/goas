@@ -101,7 +101,7 @@ line:
     $$ = $2;
     }
 
-| error '\n' { $$ = "error"};
+| error '\n' { $$ = "error";} ;
 
 scan:
 "scan" '(' FP ')' ';'                                   {$$ = $3;} ;

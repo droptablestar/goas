@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select * from t600k where twenty<9 OR twenty=18;"

@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select unique1, unique2, two, four, ten, twenty from t10k;"

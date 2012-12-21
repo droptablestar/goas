@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select * from t400k where two=1;"

@@ -1,29 +1,63 @@
-import commands,os,time
+import commands,os,time,sys,re
 
 # names = os.listdir('pgres_queries/select/')
 times = []
 RUNS = 10
 
-os.system('purge')
+# os.system('purge')
 def main():
     global times
+    with open('results/g_times.txt','w') as f:
+        pass
+    if len(sys.argv) < 2:
+        print 'Enter operator(s) to test (scan, select, project, sort, all, full)'
+        exit()
+
     rootDir = '.'
     for dirN, subDir, fName in os.walk('pgres_queries'):
-        if dirN == 'pgres_queries/scan' or dirN == 'pgres_queries/select' or dirN == 'pgres_queries' or dirN == 'pgres_queries/all':
+        # just scanning
+        if sys.argv[1] == 'scan' and '0' not in dirN:
             continue
-        for name0 in fName:
-            name = dirN + '/' + name0
+        if sys.argv[1] == 'select' and '1' not in dirN:
+            continue
+        if sys.argv[1] == 'project' and '2' not in dirN:
+            continue
+        if sys.argv[1] == 'sort' and '3' not in dirN:
+            continue
+        if sys.argv[1] == 'all' and '4' not in dirN:
+            continue
+        
+        if dirN != 'pgres_queries/0scan':
+            names = [[int(x[x.find('t')+1:x.find('s')].strip('k_')),int(re.sub('t[0-9]+[a-z\_]+','',x)),x] for x in fName]
+            for n in names:
+                if 'k' in n[2]:
+                    n[0] *= 1000
+            names.sort()
+            names = [x[2] for x in names]
+        else:
+            print "here"
+            print fName
+            names = [[int(x[x.find('t')+1:min(x.find('_'),abs(x.find('s')))].strip('k')),x] for x in fName]
+            
+            for n in names:
+                if 'k' in n[1]:
+                    n[0] *= 1000
+            names.sort()
+            names = [x[1] for x in names]
+
+        for name in names:
+            name = dirN + '/' + name
+            print name
             for i in range(RUNS):
                 print name, i
-                times.append(commands.getoutput('time ./'+name))
+                times.append(commands.getoutput('time ./'+name+' > /dev/null'))
                 time.sleep(.2)
-                os.system('purge')
             print times
-            dumpData(name0)
+            dumpData(name)
 
 def dumpData(name):
     global times
-    with open('pgres_results/times.txt','a') as f:
+    with open('results/gres_'+sys.argv[1]+'.txt','a') as f:
         f.write(name+'\t')
         for j in range(RUNS):
             start = times[0].find('\t') + 1

@@ -21,7 +21,7 @@ def main():
         print 'Usage: python stats.py <filename1> <filename2> <filename3>'
         exit()
 
-    res = open('org_times.txt','w')
+    res = open('times.txt','w')
     res.write(' '*MAX_S+'\tpgres\t\t\toas\n')
     
     with open(sys.argv[1], 'r') as f:

@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select unique1, unique2, two, four, ten, twenty, onepercent, tenpercent, twentypercent from t1 where onepercent<48 OR onepercent=90 OR onepercent=20 OR onepercent=50 order by unique1, unique2, two, four, ten, twenty, onepercent, tenpercent, twentypercent;"

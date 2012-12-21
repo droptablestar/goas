@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select * from t900k order by unique1, unique2, two, four, ten, twenty;"

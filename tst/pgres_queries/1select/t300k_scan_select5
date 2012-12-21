@@ -1,0 +1,1 @@
+psql -d goas -U jgres -c "select * from t300k where ten=1 OR ten=2 OR ten=3 OR ten=4 OR ten=5;"
