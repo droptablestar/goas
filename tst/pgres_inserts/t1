@@ -1,4 +1,0 @@
-DROP TABLE IF EXISTS t1;
-create table t1 (unique1 bigint, unique2 bigint, two bigint, four bigint, ten bigint, twenty bigint, onepercent bigint, tenpercent bigint, twentypercent bigint, fiftypercent bigint, unique3 bigint, even bigint, odd bigint, stringu1 text, stringu2 text, stringu4 text);
-insert into t1 values (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
-\d
