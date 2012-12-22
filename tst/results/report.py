@@ -20,7 +20,7 @@ def main():
         print 'Usage: python report.py <new_times> <query_set (scan, select, project, sort, all, full)> <flags (-diff-check)>>'
         exit()
 
-    with open('org_times.txt','r') as f:
+    with open('times.txt','r') as f:
         o_lines = f.readlines()
     
     with open(sys.argv[1], 'r') as f:
