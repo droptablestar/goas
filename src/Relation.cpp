@@ -1,70 +1,33 @@
+
 #include "Relation.hpp"
 
 #include <iostream>
 
 using namespace std;
 
-Meta& Relation::get_meta(){
-    return meta;    
-}
-
-void Relation::addRecord(Record* rec) {
+void Relation::add_record(Record& rec){
     this->records.push_back(rec);
 }
 
-Record* Relation::getRecord(unsigned int position) {
-    return this->records.at(position);
+Meta& Relation::get_meta(){
+    return meta;        
 }
 
-unsigned short Relation::getNumberOfColumns() {
-    return meta.number_of_columns;
-}
-unsigned int Relation::getNumberOfRows() {
-    return meta.number_of_rows;
-}
-char Relation::getColumnType(unsigned int position) {
-    return meta.column_types[position];
-}
-string Relation::getColumnName(unsigned int position) {
-    return meta.column_names[position];
+void Relation::set_size(){
+    records.reserve(meta.number_of_rows());    
 }
 
-void Relation::print(){
-    unsigned short num_cols = getNumberOfColumns();
-    unsigned int num_rows = getNumberOfRows();
-    int i,j;
+void Relation::print() const{
 
-    for (i=0; i<num_cols; i++) {
-	if (i != num_cols-1)
-	    cout<<" "<< getColumnName(i)<<" |";
-	else
-	    cout<<" "<<getColumnName(i);
-    }
+    meta.print();
     cout<<endl;
-
-    for (i=0; i<num_cols; i++) {
-    	for (j=0; j<getColumnName(i).length()+2; j++)
-    	    cout<<"-";
-    	if (i != num_cols-1)
-    	    cout<<"+";
+    
+    for(auto i:records){
+        i.print();    
     }
 
-    cout<<endl;
-
-    unsigned short len,k;
-    for (i=0; i<num_rows; i++) {
-    	for (j=0; j<num_cols; j++) {
-    	    len = (getColumnName(j).length() + 1) - getRecord(i)->getElement(j).length();
-    	    for (k=0; k<len; k++)
-    	    	cout<<" ";
-    	    cout<<getRecord(i)->getElement(j);
-    	    if (j != num_cols-1)
-    		cout<<" |";
-    	}
-    	cout<<endl;
-    }
-    cout<<"("<<num_rows<<" rows)"<<endl;
-
+    cout<<"("<<meta.number_of_rows()<<" rows)"<<endl;
 }
+
 
 

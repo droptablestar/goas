@@ -1,34 +1,20 @@
 
 #include "MMapLinux.hpp"
+#include "Record.hpp"
+#include "Relation.hpp"
+#include "StringUtilities.hpp"
+#include "RawStringField.hpp"
+#include "IntegerField.hpp"
+#include "Constants.hpp"
 
 #include <string.h>
-#include <iostream>
-#include <stdio.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <vector>
 
 using namespace std;
 
-string read_string_type(char* &s){
-    char raw_data;
-    vector<char> data;
- 
-    memcpy(&raw_data, s, sizeof(raw_data));
-    s = s + sizeof(raw_data);
-
-    while(raw_data!='\0'){
-        data.push_back(raw_data);
-        memcpy(&raw_data, s, sizeof(raw_data));
-        s = s + sizeof(raw_data);
-    }
-    string name(data.begin(), data.end());
-    return name;
-}
-
 MMapLinux::MMapLinux(const string file):file(file){}
-
 
 void MMapLinux::open_file(){
     struct stat sb;
@@ -52,50 +38,53 @@ void MMapLinux::open_file(){
 }
 
 void MMapLinux::set_meta(Meta& meta){
+    unsigned short n_columns;
+    memcpy(&n_columns, data, sizeof(n_columns));
+    data = data + sizeof(n_columns);
+    meta.set_number_of_columns(n_columns);
 
-    memcpy(&meta.number_of_columns, data, sizeof(meta.number_of_columns));
-    data = data + sizeof(meta.number_of_columns);
-    memcpy(&meta.number_of_rows, data, sizeof(meta.number_of_rows));
-    data = data + sizeof(meta.number_of_rows);
+    unsigned int n_rows;
+    memcpy(&n_rows, data, sizeof(n_rows));
+    data = data + sizeof(n_rows);
+    meta.set_number_of_rows(n_rows);
 
-
-    for(int i = 0; i< meta.number_of_columns; ++i){
+    for(int i = 0; i< n_columns; ++i){
         char type_column;
         memcpy(&type_column, data, sizeof(type_column));
         data = data + sizeof(type_column);
-        meta.column_types.push_back(type_column);
+        meta.add_column_type(type_column);
 
-        string column_name = read_string_type(data);
-        meta.column_names.push_back(column_name);
+        string column_name = StringUtilities::read_string_type(data);
+        meta.add_column_name(column_name);
     }
 }
 
 void MMapLinux::set_relation(Relation& relation){
-    for(int i=0; i<relation.get_meta().number_of_rows; ++i){
-        Record* rec = new Record;
-        for(int j=0; j<relation.get_meta().number_of_columns; ++j){
-            if(relation.get_meta().column_types[j]==0) {
-                /* TODO: this isn't safe. needs some kind of bounds check.
-                   also wastes space */
-                char snum[10];
+    Meta& meta = relation.get_meta();
+    unsigned int number_of_rows = meta.number_of_rows();
+    for(int i=0; i<number_of_rows; ++i){
+        unsigned int number_of_columns = meta.number_of_columns();
+        Record record(number_of_columns);
+
+        for(int j=0; j<number_of_columns; ++j){
+            if(meta.get_type(j)==TYPE_INTEGER) {
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
-                sprintf(snum, "%d\0", number);
                 data = data + sizeof(int);
-                rec->data.push_back(snum);
+
+                record.add(new IntegerField(number));
             }
-            else if(relation.get_meta().column_types[j]==1){
-                size_t length = 0;
-                char raw_data = data[length];
+            else if(meta.get_type(j)==TYPE_STRING){
+                const unsigned int size = StringUtilities::get_size_of_string(data);
+                RawStringField* field = new RawStringField(size);
 
-                while(raw_data!='\0')
-                    raw_data = data[++length];
+                memcpy(field->raw_ptr(), data, size);
+                data = data + size;
 
-                rec->data.push_back(string(data, length));
-                data = data + (++length);
+                record.add(field);
             }
         }
-        relation.addRecord(rec);//passing the pointer is much more efficient
+        relation.add_record(record);
     }
 }
 

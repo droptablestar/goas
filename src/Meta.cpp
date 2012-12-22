@@ -6,22 +6,39 @@
 
 using namespace std;
 
+void Meta::print() const{
+    cout<<"number of columns: "<<n_columns<<endl;
+    cout<<"number of rows: "<<n_rows<<endl;
 
-void Meta::print(){
-    cout<<"number of columns: "<<number_of_columns<<endl;
-    cout<<"number of rows: "<<number_of_rows<<endl;
-
-    for_each(column_names.begin(), column_names.end(), [](string &e){
-            cout<<e<<'\t'; 
-        });
-     
-    cout<<endl;
-     
-    for_each(column_types.begin(), column_types.end(), [](unsigned short &e){
-            cout<<e<<'\t';
-        });
+    for(auto i:column_names){
+        cout<<"|  "<<i<<"  ";    
+    }
 }
 
+unsigned short Meta::number_of_columns() const{
+    return n_columns;    
+}
 
+unsigned int Meta::number_of_rows() const{
+    return n_rows;   
+}
 
+void Meta::set_number_of_columns(const unsigned short n_columns){
+    this->n_columns = n_columns;    
+}
 
+void Meta::set_number_of_rows(const unsigned int n_rows){
+    this->n_rows = n_rows;    
+}
+
+void Meta::add_column_name(const string name){
+    column_names.push_back(name);
+}
+
+void Meta::add_column_type(const unsigned short type){
+    column_types.push_back(type);
+}
+
+unsigned short Meta::get_type(const unsigned int index) const{
+    return column_types[index];    
+}

@@ -1,3 +1,4 @@
+
 #include "Relation.hpp"
 #include "Record.hpp"
 #include "Scan.hpp"
@@ -17,6 +18,7 @@ void scan(const char *file_name, Relation& relation){
 
     input.open_file();
     input.set_meta(relation.get_meta());
+    relation.set_size();
     input.set_relation(relation);
 }
 

@@ -1,10 +1,11 @@
+#ifndef MMAPLINUX_93R8JG9EW8JRG9WEJ8RG98JWER9G8J
+#define MMAPLINUX_93R8JG9EW8JRG9WEJ8RG98JWER9G8J
 
-//#include "Meta.hpp"
-#include "Relation.hpp"
 
 #include <string>
 
-class Meta;
+struct Meta;
+class Relation;
 
 class MMapLinux{
     public:
@@ -18,3 +19,5 @@ class MMapLinux{
         const std::string file;
         char* data;
 };
+
+#endif //MMAPLINUX_93R8JG9EW8JRG9WEJ8RG98JWER9G8J
