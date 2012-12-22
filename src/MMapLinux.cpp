@@ -5,6 +5,7 @@
 #include "StringUtilities.hpp"
 #include "RawStringField.hpp"
 #include "IntegerField.hpp"
+#include "Constants.hpp"
 
 #include <string.h>
 #include <fcntl.h>
@@ -66,14 +67,14 @@ void MMapLinux::set_relation(Relation& relation){
         Record record(number_of_columns);
 
         for(int j=0; j<number_of_columns; ++j){
-            if(meta.get_type(j)==0) {
+            if(meta.get_type(j)==TYPE_INTEGER) {
                 int number = 0;
                 memcpy(&number, data, sizeof(number));
                 data = data + sizeof(int);
 
                 record.add(new IntegerField(number));
             }
-            else if(meta.get_type(j)==1){
+            else if(meta.get_type(j)==TYPE_STRING){
                 const unsigned int size = StringUtilities::get_size_of_string(data);
                 RawStringField* field = new RawStringField(size);
 
