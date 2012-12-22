@@ -3,11 +3,18 @@ import commands,os,time,re,sys
 RUNS = 10
 
 def main():
-    if len(sys.argv) < 2:
-        print 'Enter operator(s) to test (scan, select, project, sort, all, full)'
+    if len(sys.argv) < 3:
+        print "Usage: python test_oas.py <query_type> <language>"
+        print "\tquery_types:\tscan, select, project, sort, all"
+        print "\tlanguages:\tcpp,c"
+        
         exit()
     c_times = []
     r_times = []
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_c.txt','w') as f:
+        pass
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_r.txt','w') as f:
+        pass
 
     # os.system('purge')
     for dirN, subDir, fName in os.walk('oas_queries'):
@@ -62,7 +69,7 @@ def main():
             c_times, r_times = dumpData(c_times, r_times, name)
 
 def dumpData(c_times, r_times, name):
-    with open('results/goas_'+sys.argv[1]+'_c.txt','a') as f:
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_c.txt','a') as f:
         f.write(name+'\t')
         for j in range(RUNS):
             start = c_times[0].find('\t') + 1
@@ -81,7 +88,7 @@ def dumpData(c_times, r_times, name):
 
         f.write('\n')
 
-    with open('results/goas_'+sys.argv[1]+'_r.txt','a') as f:
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_r.txt','a') as f:
         f.write(name+'\t')
         for j in range(RUNS):
             start = r_times[0].find('\t') + 1

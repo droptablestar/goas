@@ -1,0 +1,9 @@
+#! /bin/bash
+set -e
+
+LIB_DIR=../lib
+INC_DIR=../include
+LIB_NAME=-loas
+
+cat $1 | ./par
+gcc -o temp temp.c -I${INC_DIR} -L${LIB_DIR} ${LIB_NAME}

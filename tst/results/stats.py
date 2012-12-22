@@ -14,6 +14,7 @@ from math import sqrt
 RUNS=10
 MAX_S=len('1000k_scan_select_project_sort12')
 MAX_N=len('67390.30')
+MAX_STD=len('00.00')
 MAX_C=len('2280.0')
 
 def main():
@@ -52,13 +53,22 @@ def main():
         m_stats = meanstdv(m_line[1:])
         c_stats = meanstdv(c_line[1:])
 
-        print p_line[0], m_line[0], p_stats
+        print p_line[0], m_line[0], p_stats, m_stats
+        # print repr("%s%s\t%.2f%s\t%.2f%s\t%.2f%s\t%.2f%s\t%.2f%s\t%.2f%s\n" % \
+        #               (m_line[0], ' '*(MAX_S-len(m_line[0])),
+        #                p_stats[0], ' '*(MAX_N-len(str(p_stats[0]))),
+        #                p_stats[1], ' '*(MAX_N-len(str(p_stats[1]))),
+        #                m_stats[0], ' '*(MAX_N-len(str(m_stats[0]))),
+        #                m_stats[1], ' '*(MAX_N-len(str(m_stats[1]))),
+        #                c_stats[0], ' '*(MAX_C-len(str(c_stats[0]))),
+        #                c_stats[1], ' '*(MAX_C-len(str(c_stats[1])))))
+        # print MAX_N-len(str(m_stats[1])),len(str(m_stats[1]))
         res.write("%s%s\t%.2f%s\t%.2f%s\t%.2f%s\t%.2f%s\t%.2f%s\t%.2f%s\n" % \
                       (m_line[0], ' '*(MAX_S-len(m_line[0])),
                        p_stats[0], ' '*(MAX_N-len(str(p_stats[0]))),
-                       p_stats[1], ' '*(MAX_N-len(str(p_stats[1]))),
+                       p_stats[1], ' '*(MAX_STD-len(str(p_stats[1]))),
                        m_stats[0], ' '*(MAX_N-len(str(m_stats[0]))),
-                       m_stats[1], ' '*(MAX_N-len(str(m_stats[1]))),
+                       m_stats[1], ' '*(MAX_STD-len(str(m_stats[1]))),
                        c_stats[0], ' '*(MAX_C-len(str(c_stats[0]))),
                        c_stats[1], ' '*(MAX_C-len(str(c_stats[1])))))
 

@@ -46,6 +46,7 @@ def main():
             names = [x[1] for x in names]
 
         for name in names:
+            fname = name
             name = dirN + '/' + name
             print name
             for i in range(RUNS):
@@ -53,7 +54,7 @@ def main():
                 times.append(commands.getoutput('time ./'+name+' > /dev/null'))
                 time.sleep(.2)
             print times
-            dumpData(name)
+            dumpData(fname)
 
 def dumpData(name):
     global times
