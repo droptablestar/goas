@@ -3,15 +3,18 @@ import commands,os,time,re,sys
 RUNS = 10
 
 def main():
-    with open('results/r_times.txt','a') as f:
-        pass
-    with open('results/c_times.txt','a') as f:
-        pass
-    if len(sys.argv) < 2:
-        print 'Enter operator(s) to test (scan, select, project, sort, all, full)'
+    if len(sys.argv) < 3:
+        print "Usage: python test_oas.py <query_type> <language>"
+        print "\tquery_types:\tscan, select, project, sort, all"
+        print "\tlanguages:\tcpp,c"
+        
         exit()
     c_times = []
     r_times = []
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_c.txt','w') as f:
+        pass
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_r.txt','w') as f:
+        pass
 
     # os.system('purge')
     for dirN, subDir, fName in os.walk('oas_queries'):
@@ -51,11 +54,13 @@ def main():
             commands.getoutput('./temp > ../tst/new_tables/'+name+'.txt')
             for i in range(RUNS):
                 print dirN,name, i
-                os.system('purge')
-                c_times.append(commands.getoutput('time ./goas ../tst/'+dirN+'/'+name))
+                # os.system('purge')
+                # time.sleep(.2)
+                c_times.append(commands.getoutput('time ./goas ../tst/'+
+                                                  dirN+'/'+name))
                 time.sleep(.3)
                 r_times.append(commands.getoutput('time ./temp > /dev/null'))
-                time.sleep(.02)
+                time.sleep(.01)
                 os.remove('temp')
                 os.remove('temp.cpp')
             os.chdir('../tst/')
@@ -64,7 +69,7 @@ def main():
             c_times, r_times = dumpData(c_times, r_times, name)
 
 def dumpData(c_times, r_times, name):
-    with open('results/c_times.txt','a') as f:
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_c.txt','a') as f:
         f.write(name+'\t')
         for j in range(RUNS):
             start = c_times[0].find('\t') + 1
@@ -83,7 +88,7 @@ def dumpData(c_times, r_times, name):
 
         f.write('\n')
 
-    with open('results/r_times.txt','a') as f:
+    with open('results/'+sys.argv[2]+'_goas_'+sys.argv[1]+'_r.txt','a') as f:
         f.write(name+'\t')
         for j in range(RUNS):
             start = r_times[0].find('\t') + 1

@@ -52,7 +52,7 @@
 %%
 program:	line {
     int i;
-    fprintf(fp, "\%s.print();\n",$1);
+    fprintf(fp, "\t%s.print();\n",$1);
     fprintf(fp, "\treturn 0;\n}\n");
     } ;
 
@@ -101,7 +101,7 @@ line:
     $$ = $2;
     }
 
-| error '\n' { $$ = "error"};
+| error '\n' { $$ = "error";} ;
 
 scan:
 "scan" '(' FP ')' ';'                                   {$$ = $3;} ;
