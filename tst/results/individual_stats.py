@@ -3,6 +3,7 @@ import sys, math
 def main():
     if len(sys.argv) < 4:
         print "Usage: python individual_stats.py <input_file> <language> <type>"
+        exit()
 
     for arg in sys.argv:
         print arg

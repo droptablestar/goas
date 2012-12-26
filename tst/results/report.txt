@@ -1,6 +1,16 @@
-1_scan                             Success pgres (788.60, 75.00)	Fail goas (37.40, 75.00)
-100_scan                           Success pgres (2225.00, 121.50)	Fail goas (39.80, 121.50)
-1k_scan                            Success pgres (2131.20, 347.00)	Fail goas (57.50, 347.00)
-10k_scan                           Success pgres (2978.10, 2836.40)	Fail goas (247.10, 2836.40)
-50k_scan                           Fail pgres (3921.00, 13504.90)	Fail goas (1211.10, 13504.90)
-100k_scan                          Fail pgres (5136.50, 26405.70)	Fail goas (2781.80, 26405.70)
+                                	pgres   	C       	cpp     	
+t1_scan                         	77.90   	1.70    	3.00    	WINNER: C
+t100_scan                       	20.40   	3.20    	5.00    	WINNER: C
+t1k_scan                        	45.00   	13.90   	14.10   	WINNER: C
+t10k_scan                       	302.50  	108.70  	106.30  	WINNER: cpp
+t50k_scan                       	1489.60 	531.70  	518.00  	WINNER: cpp
+t100k_scan                      	2932.70 	1059.90 	1032.60 	WINNER: cpp
+t200k_scan                      	5948.50 	2121.80 	2065.40 	WINNER: cpp
+t300k_scan                      	8947.60 	3163.00 	3096.70 	WINNER: cpp
+t400k_scan                      	11956.90	4214.80 	4116.50 	WINNER: cpp
+t500k_scan                      	14975.90	5270.00 	5158.00 	WINNER: cpp
+t600k_scan                      	17965.90	6323.10 	6182.60 	WINNER: cpp
+t700k_scan                      	20970.40	7357.20 	7199.20 	WINNER: cpp
+t800k_scan                      	23972.70	8389.40 	8236.00 	WINNER: cpp
+t900k_scan                      	26978.60	9430.60 	9255.80 	WINNER: cpp
+t1000k_scan                     	30042.00	10425.80	10274.60	WINNER: cpp
