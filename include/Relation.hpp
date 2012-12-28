@@ -11,8 +11,6 @@
 #define INT 0
 #define STRING 1
 
-class Record;
-
 class Relation{
     public:
         void add_record(Record& rec);

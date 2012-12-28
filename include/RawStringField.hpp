@@ -10,9 +10,11 @@ class RawStringField:public Field{
 
         void print() const;
         char* raw_ptr() const;
+        Field* clone() const;
 
     private:
         char* _field;
+        const unsigned int size;
 };
 
 #endif //RAWSTRINGFIELD_9S8RY987YG8WH7EG8E7WHG87HEW8R7HG

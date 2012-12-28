@@ -11,3 +11,6 @@ void IntegerField::print() const{
     cout<<field;    
 }
 
+Field* IntegerField::clone() const{
+    return new IntegerField(field);    
+}

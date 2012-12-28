@@ -3,9 +3,6 @@
 
 #include <iostream>
 
-using namespace std;
 
-Field::Field(){}
 
-Field::~Field(){}
 

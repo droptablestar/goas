@@ -7,6 +7,8 @@
 #include <vector>
 #include <iostream>
 
+using namespace std;
+
 class Record{
     public:
         Record(const unsigned int size){
@@ -14,6 +16,19 @@ class Record{
              avoid wastefull copies, size is the number of 
              columns in the relation*/
             container.reserve(size);    
+        }
+
+        ~Record(){
+            for(auto i:container){
+                delete i;    
+            }
+        }
+
+        Record(const Record& other):container(other.container.size()){//this prevent the resizing.
+            for(int i=0; i<container.size(); ++i){
+                container[i] = other.container[i]->clone();
+            }
+
         }
 
         void add(Field* field){
@@ -38,7 +53,7 @@ class Record{
             }    
             std::cout<<std::endl;
         }
-        
+
     private:
         std::vector<Field*> container;
 };

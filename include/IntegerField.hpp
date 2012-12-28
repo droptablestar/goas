@@ -9,6 +9,7 @@ class IntegerField:public Field{
         IntegerField(const int field);
 
         void print() const;
+        Field* clone() const;
 
     private:
         const int field;
