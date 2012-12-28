@@ -11,7 +11,6 @@ SET(SOURCES
     MMapLinux.cpp
     Meta.cpp
     StringUtilities.cpp
-    Field.cpp
     IntegerField.cpp
     RawStringField.cpp
 )
