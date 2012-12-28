@@ -28,7 +28,6 @@ class Record{
             for(int i=0; i<container.size(); ++i){
                 container[i] = other.container[i]->clone();
             }
-
         }
 
         void add(Field* field){

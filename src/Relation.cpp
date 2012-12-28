@@ -5,7 +5,16 @@
 
 using namespace std;
 
-void Relation::add_record(Record& rec){
+Relation::Relation(){
+}
+
+Relation::~Relation(){
+    for(auto i:records){
+        delete i;    
+    }
+}
+
+void Relation::add_record(Record* rec){
     this->records.push_back(rec);
 }
 
@@ -18,14 +27,12 @@ void Relation::set_size(){
 }
 
 void Relation::print() const{
-
     meta.print();
     cout<<endl;
     
     for(auto i:records){
-        i.print();    
+        i->print();    
     }
-
     cout<<"("<<meta.number_of_rows()<<" rows)"<<endl;
 }
 

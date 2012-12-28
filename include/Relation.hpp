@@ -13,13 +13,16 @@
 
 class Relation{
     public:
-        void add_record(Record& rec);
+        Relation();
+        ~Relation();
+
+        void add_record(Record* rec);
         Meta& get_meta();
         void print() const;
         void set_size();
 
     private:
-        std::vector<Record> records;
+        std::vector<Record*> records;
         Meta meta;
 };
 

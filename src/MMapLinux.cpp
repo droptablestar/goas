@@ -64,7 +64,7 @@ void MMapLinux::set_relation(Relation& relation){
     unsigned int number_of_rows = meta.number_of_rows();
     for(int i=0; i<number_of_rows; ++i){
         unsigned int number_of_columns = meta.number_of_columns();
-        Record record(number_of_columns);
+        Record* record = new Record(number_of_columns);
 
         for(int j=0; j<number_of_columns; ++j){
             if(meta.get_type(j)==TYPE_INTEGER) {
@@ -72,7 +72,7 @@ void MMapLinux::set_relation(Relation& relation){
                 memcpy(&number, data, sizeof(number));
                 data = data + sizeof(int);
 
-                record.add(new IntegerField(number));
+                record->add(new IntegerField(number));
             }
             else if(meta.get_type(j)==TYPE_STRING){
                 const unsigned int size = StringUtilities::get_size_of_string(data);
@@ -81,7 +81,7 @@ void MMapLinux::set_relation(Relation& relation){
                 memcpy(field->raw_ptr(), data, size);
                 data = data + size;
 
-                record.add(field);
+                record->add(field);
             }
         }
         relation.add_record(record);
