@@ -21,9 +21,3 @@ char* RawStringField::raw_ptr() const{//I dont like this function at all!
     return _field;    
 }
 
-Field* RawStringField::clone() const{
-    RawStringField* other = new RawStringField(size);
-    memcpy(other->raw_ptr(), _field, size);
-    return other;
-}
-

@@ -8,10 +8,8 @@ class IntegerField:public Field{
     public:
         IntegerField(const int field);
         IntegerField(const IntegerField& other);
-//        IntegerField& operator=(const IntegerField& other);
 
         void print() const;
-        Field* clone() const;
 
     private:
         int field;

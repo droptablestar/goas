@@ -40,6 +40,7 @@ class Record{
             unsigned number_of_columns = meta.number_of_columns();
             unsigned int SF_index = 0;
             unsigned int IF_index = 0;
+
             for(int i=0; i<number_of_columns; ++i){
                 if(meta.get_type(i)==TYPE_STRING){
                     std::cout<<"| ";
