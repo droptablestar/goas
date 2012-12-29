@@ -7,12 +7,14 @@
 class IntegerField:public Field{
     public:
         IntegerField(const int field);
+        IntegerField(const IntegerField& other);
+//        IntegerField& operator=(const IntegerField& other);
 
         void print() const;
         Field* clone() const;
 
     private:
-        const int field;
+        int field;
 };
 
 #endif //INTEGERFIELD_8A7H8D7HAW8D7HF8AWH
