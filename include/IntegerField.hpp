@@ -6,6 +6,7 @@ class IntegerField{
     public:
         IntegerField(const int field);
         IntegerField(const IntegerField& other);
+        IntegerField& operator=(const IntegerField& other);
 
         void print() const;
 
