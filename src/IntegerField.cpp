@@ -14,6 +14,14 @@ IntegerField& IntegerField::operator=(const IntegerField& other){
     return *this;
 }
 
+bool IntegerField::operator==(const IntegerField& other) const{
+    return field == other.field;
+}
+
+bool IntegerField::operator!=(const IntegerField& other) const{
+    return field != other.field;
+}
+
 void IntegerField::print() const{
     cout<<field;    
 }

@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <stdio.h>
 
 #include "RawStringField.hpp"
 
@@ -8,7 +9,10 @@ RawStringField::RawStringField(const unsigned int size):size(size),
                                                         field(size? new char[size] : nullptr){}
 
 RawStringField::~RawStringField(){
-    delete [] field;    
+    if(field) {
+        delete [] field;    
+        field = nullptr;
+    }
 }
 
 RawStringField::RawStringField(const RawStringField& other):size(other.size),
@@ -17,12 +21,24 @@ RawStringField::RawStringField(const RawStringField& other):size(other.size),
 }
 
 RawStringField::RawStringField(RawStringField&& other){
+    size = 0;
+    field = nullptr;
     swap(*this, other);    
 }
                                                             
 RawStringField& RawStringField::operator=(RawStringField other){
     swap(*this, other);
     return *this;
+}
+
+bool RawStringField::operator==(const RawStringField& other) const{
+    if(strncmp(field, other.field, size)==0 && size==other.size) return true;
+    return false;
+}
+
+bool RawStringField::operator!=(const RawStringField& other) const{
+    if(strncmp(field, other.field, size)!=0 || size!=other.size) return true;
+    return false;
 }
 
 void RawStringField::swap(RawStringField& a, RawStringField& b){
@@ -37,5 +53,9 @@ void RawStringField::print() const{
 
 char* RawStringField::raw_ptr() const{//I dont like this function at all!
     return field;    
+}
+
+unsigned int RawStringField::length() const{
+    return size;    
 }
 

@@ -8,9 +8,12 @@ class RawStringField{
         RawStringField(const RawStringField& other);
         RawStringField& operator=(RawStringField other);
         RawStringField(RawStringField&& other);
+        bool operator==(const RawStringField& other) const;
+        bool operator!=(const RawStringField& other) const;
 
         void print() const;
         char* raw_ptr() const;
+        unsigned int length() const;
 
     private:
         void swap(RawStringField& a, RawStringField& b);
