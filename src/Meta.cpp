@@ -21,19 +21,19 @@ void Meta::print() const{
     }
 }
 
-unsigned short Meta::number_of_columns() const{
+unsigned short Meta::columns() const{
     return n_columns;    
 }
 
-unsigned int Meta::number_of_rows() const{
+unsigned int Meta::rows() const{
     return n_rows;   
 }
 
-void Meta::set_number_of_columns(const unsigned short n_columns){
+void Meta::set_columns(const unsigned short n_columns){
     this->n_columns = n_columns;    
 }
 
-void Meta::set_number_of_rows(const unsigned int n_rows){
+void Meta::set_rows(const unsigned int n_rows){
     this->n_rows = n_rows;    
 }
 
@@ -49,6 +49,10 @@ void Meta::add_column_type(const unsigned short type){
 
 unsigned short Meta::get_type(const unsigned int index) const{
     return column_types[index];    
+}
+
+string Meta::get_name(const unsigned int index) const{
+    return column_names[index];    
 }
 
 unsigned short Meta::integers_in_record() const{

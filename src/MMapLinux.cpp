@@ -41,12 +41,12 @@ void MMapLinux::set_meta(Meta& meta){
     unsigned short n_columns;
     memcpy(&n_columns, data, sizeof(n_columns));
     data = data + sizeof(n_columns);
-    meta.set_number_of_columns(n_columns);
+    meta.set_columns(n_columns);
 
     unsigned int n_rows;
     memcpy(&n_rows, data, sizeof(n_rows));
     data = data + sizeof(n_rows);
-    meta.set_number_of_rows(n_rows);
+    meta.set_rows(n_rows);
 
     for(int i = 0; i< n_columns; ++i){
         char type_column;
@@ -61,9 +61,9 @@ void MMapLinux::set_meta(Meta& meta){
 
 void MMapLinux::set_relation(Relation& relation){
     Meta& meta = relation.get_meta();
-    unsigned int number_of_rows = meta.number_of_rows();
+    unsigned int number_of_rows = meta.rows();
     for(int i=0; i<number_of_rows; ++i){
-        unsigned int number_of_columns = meta.number_of_columns();
+        unsigned int number_of_columns = meta.columns();
         Record* record = new Record(number_of_columns, meta);
 
         for(int j=0; j<number_of_columns; ++j){

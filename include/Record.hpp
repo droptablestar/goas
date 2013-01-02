@@ -34,7 +34,7 @@ class Record{
         }
 
         void print() const{
-            unsigned number_of_columns = meta.number_of_columns();
+            unsigned number_of_columns = meta.columns();
             unsigned int SF_index = 0;
             unsigned int IF_index = 0;
 

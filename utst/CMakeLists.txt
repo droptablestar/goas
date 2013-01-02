@@ -13,6 +13,7 @@ SET(SOURCES
     tests.cpp
     IntegerFieldTests.cpp
     RawStringFieldTests.cpp
+    MetaTests.cpp
 )
 
 ADD_EXECUTABLE(${BINARY_NAME} ${SOURCES})

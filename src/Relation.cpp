@@ -23,7 +23,7 @@ Meta& Relation::get_meta(){
 }
 
 void Relation::set_size(){
-    records.reserve(meta.number_of_rows());    
+    records.reserve(meta.rows());    
 }
 
 void Relation::print() const{
@@ -33,7 +33,7 @@ void Relation::print() const{
     for(auto i:records){
         i->print();    
     }
-    cout<<"("<<meta.number_of_rows()<<" rows)"<<endl;
+    cout<<"("<<meta.rows()<<" rows)"<<endl;
 }
 
 
