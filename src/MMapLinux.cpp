@@ -77,9 +77,9 @@ void MMapLinux::set_relation(Relation& relation){
             }
             else if(meta.get_type(j)==TYPE_STRING){
                 const unsigned int size = StringUtilities::get_size_of_string(data);
-                RawStringField* field = new RawStringField(size);
+                RawStringField field(size);
 
-                memcpy(field->raw_ptr(), data, size);
+                memcpy(field.raw_ptr(), data, size);
                 data = data + size;
 
                 record->add(field);

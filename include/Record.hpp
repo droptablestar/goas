@@ -22,14 +22,11 @@ class Record{
             container_SF.reserve(meta.strings_in_record());    
         }
 
-        ~Record(){
-            for(auto i:container_SF){
-                delete i;    
-            }
-        }
-
-        void add(RawStringField* field){
-            container_SF.push_back(field);        
+        /*This is pretty cool, calling move, Im just calling
+         * the move constructor of RawStringField not the copy 
+         * constructor, improving the performance of the operation*/
+        void add(RawStringField& field){
+            container_SF.push_back(move(field));        
         }
 
         void add(IntegerField& field){
@@ -44,7 +41,7 @@ class Record{
             for(int i=0; i<number_of_columns; ++i){
                 if(meta.get_type(i)==TYPE_STRING){
                     std::cout<<"| ";
-                    container_SF[SF_index]->print(); 
+                    container_SF[SF_index].print(); 
                     std::cout<<"  ";
                     ++SF_index;
                 }
@@ -60,7 +57,7 @@ class Record{
 
     private:
         std::vector<IntegerField> container_IF;
-        std::vector<RawStringField*> container_SF;
+        std::vector<RawStringField> container_SF;
         const Meta& meta;
 };
 
