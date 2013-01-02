@@ -1,9 +1,9 @@
 
+#include "RawStringField.hpp"
+
 #include <iostream>
 #include <algorithm>
-#include <stdio.h>
-
-#include "RawStringField.hpp"
+#include <cstring>
 
 RawStringField::RawStringField(const unsigned int size):size(size),
                                                         field(size? new char[size] : nullptr){}
