@@ -13,7 +13,6 @@ SET(SOURCES
     StringUtilities.cpp
     IntegerField.cpp
     RawStringField.cpp
-    Record.cpp
 )
 
 ADD_LIBRARY(${LIBNAME} STATIC ${SOURCES})
