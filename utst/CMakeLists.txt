@@ -14,6 +14,9 @@ SET(SOURCES
     IntegerFieldTests.cpp
     RawStringFieldTests.cpp
     MetaTests.cpp
+    RecordTests.cpp
+    MetaBasicPopulator.cpp
+    RecordBasicPopulator.cpp
 )
 
 ADD_EXECUTABLE(${BINARY_NAME} ${SOURCES})

@@ -4,7 +4,7 @@
 
 #include <string>
 
-struct Meta;
+class Meta;
 class Relation;
 
 class MMapLinux{
@@ -12,7 +12,7 @@ class MMapLinux{
         MMapLinux(const std::string file);
 
         void open_file();
-        void set_meta(Meta& meta);
+        void set_meta(Meta* meta);
         void set_relation(Relation& relation);
 
     private:

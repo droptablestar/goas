@@ -12,6 +12,15 @@ Meta::Meta():ints_in_record(0),
             n_columns(0),
             n_rows(0){}
 
+bool Meta::operator==(const Meta& other) const{
+    return ints_in_record == other.ints_in_record &&
+        strs_in_record == other.strs_in_record &&
+        n_columns == other.n_columns &&
+        n_rows == other.n_rows &&
+        equal(column_names.begin(), column_names.end(), other.column_names.begin()) &&
+        equal(column_types.begin(), column_types.end(), other.column_types.begin());
+}
+
 void Meta::print() const{
     cout<<"number of columns: "<<n_columns<<endl;
     cout<<"number of rows: "<<n_rows<<endl;

@@ -18,8 +18,8 @@ void Relation::add_record(Record* rec){
     this->records.push_back(rec);
 }
 
-Meta& Relation::get_meta(){
-    return meta;        
+Meta* Relation::get_meta(){
+    return &meta;        
 }
 
 void Relation::set_size(){

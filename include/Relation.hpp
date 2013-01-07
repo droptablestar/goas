@@ -16,7 +16,7 @@ class Relation{
         ~Relation();
 
         void add_record(Record* rec);
-        Meta& get_meta();
+        Meta* get_meta();
         void print() const;
         void set_size();
 
