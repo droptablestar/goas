@@ -8,6 +8,7 @@ SET(LIBNAME oas)
 SET(SOURCES
     Relation.cpp
     scan.cpp
+    sort.cpp
     MMapLinux.cpp
     Meta.cpp
     StringUtilities.cpp

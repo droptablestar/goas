@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void scan(const char *file_name, Relation& relation){
+void scan(const char* file_name, Relation& relation){
     MMapLinux input(file_name);
 
     input.open_file();

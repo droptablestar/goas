@@ -19,6 +19,7 @@ class Relation{
         Meta* get_meta();
         void print() const;
         void set_size();
+        void sort();
 
     private:
         std::vector<Record*> records;
