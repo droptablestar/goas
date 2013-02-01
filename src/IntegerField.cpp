@@ -18,6 +18,14 @@ bool IntegerField::operator==(const IntegerField& other) const{
     return field == other.field;
 }
 
+bool IntegerField::operator<(const IntegerField& other) const{
+    return field < other.field;    
+}
+
+bool IntegerField::operator>(const IntegerField& other) const{
+    return field > other.field;    
+}
+
 bool IntegerField::operator!=(const IntegerField& other) const{
     return field != other.field;
 }

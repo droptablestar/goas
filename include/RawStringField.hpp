@@ -10,6 +10,8 @@ class RawStringField{
         RawStringField(RawStringField&& other);
         bool operator==(const RawStringField& other) const;
         bool operator!=(const RawStringField& other) const;
+        bool operator<(const RawStringField& other) const;
+        bool operator>(const RawStringField& other) const;
 
         void print() const;
         char* raw_ptr() const;

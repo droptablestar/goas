@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <unordered_set>
 
 using namespace std;
 
@@ -46,7 +47,9 @@ void Meta::set_rows(const unsigned int n_rows){
     this->n_rows = n_rows;    
 }
 
-void Meta::add_column_name(const string name){
+void Meta::add_column_name(string name){
+    name.pop_back();/*this is because the string came from the file with
+                    a weird character at the end!!!!*/
     column_names.push_back(name);
 }
 
@@ -70,6 +73,38 @@ unsigned short Meta::integers_in_record() const{
 
 unsigned short Meta::strings_in_record() const{
     return strs_in_record;    
+}
+
+/*interesting trade off, if i sorted the arrays im going to lose time
+ * copying strings from one array to another, because i dont want to 
+ * destroy the inputs arrays, copying I will achieved O(nlog(n)) without
+ * considering the copies, if i dont do copies, i can do the O(n^2) approach,
+ * but avoiding the copies and the extra data structures, because like I said
+ * I cannot destroy the input vectors.*/
+
+/*try to return the constness of this method*/
+vector<string> Meta::keys_intersection(vector<string>& keys){
+    //format_column_names();
+    vector<string> result;
+    for(auto a:keys){
+        for(auto b:column_names){
+            int res = a.compare(b);
+            if(a.compare(b) == 0){
+                result.push_back(a);
+            }
+        }
+    }
+    return result;
+}
+
+vector<unsigned int> Meta::keys_indexes(vector<string>& keys) const{
+    vector<unsigned int> result;
+    for(auto i:keys){
+        auto it = find(column_names.begin(), column_names.end(), i);
+        result.push_back(distance(column_names.begin(), it));
+    }
+
+    return result;
 }
 
 

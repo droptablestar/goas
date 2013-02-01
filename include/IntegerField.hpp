@@ -8,6 +8,8 @@ class IntegerField{
         IntegerField(const IntegerField& other);
         IntegerField& operator=(const IntegerField& other);
         bool operator==(const IntegerField& other) const;
+        bool operator<(const IntegerField& other) const;
+        bool operator>(const IntegerField& other) const;
         bool operator!=(const IntegerField& other) const;
 
         void print() const;

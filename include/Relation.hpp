@@ -2,13 +2,11 @@
 #define RELATION_Q9HF9QWHEF98WHEF9
 
 #include "Meta.hpp"
-#include "Record.hpp"
 
 #include <vector>
 #include <string>
 
-#define INT 0
-#define STRING 1
+class Record;
 
 class Relation{
     public:
@@ -19,7 +17,7 @@ class Relation{
         Meta* get_meta();
         void print() const;
         void set_size();
-        void sort();
+        void sort(std::vector<unsigned int>& indexes);
 
     private:
         std::vector<Record*> records;

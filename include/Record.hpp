@@ -15,10 +15,12 @@ class Record{
         Record(const unsigned int size, Meta* meta);
         bool operator==(const Record& other) const;
 
+        bool less_than(const Record& other, std::vector<unsigned int>& indexes) const;
         void add(RawStringField& field);
         void add(IntegerField& field);
         void print() const;
         unsigned int size() const;
+        
 
     private:
         std::vector<IntegerField> container_IF;
@@ -42,6 +44,33 @@ bool Record::operator==(const Record& other) const{
     bool cont_sf = equal(container_SF.begin(), container_SF.end(), other.container_SF.begin());
 
     return cont_if && cont_sf && (meta == other.meta);
+}
+
+/*I dont like it, is inneficient, transversing every time part of the record to get the right field!!!!!
+ * maybe sacrifice a little time in scanning and put there the information already in record*/
+inline 
+bool Record::less_than(const Record& other, std::vector<unsigned int>& indexes) const{
+    for(unsigned int i = 0; i < indexes.size(); ++i){
+        if(meta->get_type(indexes[i]) == TYPE_INTEGER){
+            unsigned int number_of_integers = 0;
+            for(unsigned int x = 0; x <= indexes[i]; ++x){
+                if(meta->get_type(x) == TYPE_INTEGER) ++number_of_integers;
+            }
+
+            if(this->container_IF[number_of_integers-1] < other.container_IF[number_of_integers-1]) return true;
+            if(this->container_IF[number_of_integers-1] > other.container_IF[number_of_integers-1]) return false;
+        }
+        if(meta->get_type(indexes[i]) == TYPE_STRING){
+            unsigned int number_of_strings = 0;
+            for(unsigned int x = 0; x <= indexes[i]; ++x){
+                if(meta->get_type(x) == TYPE_STRING) ++number_of_strings;
+            }
+
+            if(this->container_SF[number_of_strings-1] < other.container_SF[number_of_strings-1]) return true;
+            if(this->container_SF[number_of_strings-1] > other.container_SF[number_of_strings-1]) return false;
+        }
+    }
+    return false;// could be any return at this point because the records are completely equal given the keys.
 }
 
 /*This is pretty cool, calling move, Im just calling

@@ -36,6 +36,16 @@ bool RawStringField::operator==(const RawStringField& other) const{
     return false;
 }
 
+bool RawStringField::operator>(const RawStringField& other) const{
+    if(strncmp(field, other.field, size) > 0) return true;
+    return false;
+}
+
+bool RawStringField::operator<(const RawStringField& other) const{
+    if(strncmp(field, other.field, size) < 0) return true;
+    return false;
+}
+
 bool RawStringField::operator!=(const RawStringField& other) const{
     if(strncmp(field, other.field, size)!=0 || size!=other.size) return true;
     return false;

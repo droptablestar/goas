@@ -1,10 +1,23 @@
 
 #include "Relation.hpp"
+#include "Record.hpp"
 
 #include <iostream>
 #include <algorithm>
 
 using namespace std;
+
+class Comparator{
+    public:
+        Comparator(vector<unsigned int>& indexes):indexes(indexes){}
+        bool operator()(Record* a, Record* b){
+            bool ret = (*a).less_than(*b, indexes);
+            return ret;
+        }
+
+    private:
+        vector<unsigned int>& indexes;
+};
 
 Relation::Relation(){
 }
@@ -40,11 +53,13 @@ void Relation::print() const{
     cout<<"("<<meta.rows()<<" rows)"<<endl;
 }
 
-void Relation::sort(){
-    cout<<"relation sorting.....!!!!!"<<endl;    
+void Relation::sort(vector<unsigned int>& indexes){
+    Comparator comparator(indexes);
     using std::sort;
-    sort(records.begin(), records.end()); 
+    sort(records.begin(), records.end(), comparator); 
 }
+
+
 
 
 
