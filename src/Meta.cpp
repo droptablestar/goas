@@ -83,12 +83,10 @@ unsigned short Meta::strings_in_record() const{
  * I cannot destroy the input vectors.*/
 
 /*try to return the constness of this method*/
-vector<string> Meta::keys_intersection(vector<string>& keys){
-    //format_column_names();
+vector<string> Meta::keys_intersection(const vector<string>& keys) const{
     vector<string> result;
     for(auto a:keys){
         for(auto b:column_names){
-            int res = a.compare(b);
             if(a.compare(b) == 0){
                 result.push_back(a);
             }
@@ -97,7 +95,7 @@ vector<string> Meta::keys_intersection(vector<string>& keys){
     return result;
 }
 
-vector<unsigned int> Meta::keys_indexes(vector<string>& keys) const{
+vector<unsigned int> Meta::keys_indexes(const vector<string>& keys) const{
     vector<unsigned int> result;
     for(auto i:keys){
         auto it = find(column_names.begin(), column_names.end(), i);
