@@ -23,6 +23,7 @@ class Meta{
         unsigned short strings_in_record() const;
         std::vector<std::string> keys_intersection(const std::vector<std::string>& keys) const;
         std::vector<unsigned int> keys_indexes(const std::vector<std::string>& keys) const;
+        void format_names();
        
     private:
         unsigned short ints_in_record;

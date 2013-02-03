@@ -17,7 +17,8 @@ class Relation{
         Meta* get_meta();
         void print() const;
         void set_size();
-        void sort(std::vector<unsigned int>& indexes);
+        void sort_ascendant(std::vector<unsigned int>& indexes);
+        void sort_descendant(std::vector<unsigned int>& indexes);
 
     private:
         std::vector<Record*> records;

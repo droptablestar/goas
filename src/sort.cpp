@@ -10,18 +10,16 @@
 using namespace std;
 
 void sort(Relation& relation, vector<string>& keys, bool order) {
-    cout<<"Sorting......."<<endl;
-    cout<<"---------------------------------------------------"<<endl;
 
     /*check for an empty relation*/
     Meta* meta = relation.get_meta();
+
+    /*this has to be changed*/
+    //meta->format_names();
+
     auto keys_present = meta->keys_intersection(keys);
-    cout<<"present? "<<keys_present.size()<<endl;
     auto keys_indexes = meta->keys_indexes(keys_present);
-    cout<<"indexes? "<<keys_indexes.size()<<endl;
-
-    relation.sort(keys_indexes);
-
-    cout<<endl;
-    cout<<"---------------------------------------------------"<<endl;
+    
+    if(order) relation.sort_ascendant(keys_indexes);
+    else relation.sort_descendant(keys_indexes);
 }

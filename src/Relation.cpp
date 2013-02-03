@@ -53,13 +53,17 @@ void Relation::print() const{
     cout<<"("<<meta.rows()<<" rows)"<<endl;
 }
 
-void Relation::sort(vector<unsigned int>& indexes){
+void Relation::sort_ascendant(vector<unsigned int>& indexes){
     Comparator comparator(indexes);
     using std::sort;
     sort(records.begin(), records.end(), comparator); 
 }
 
-
+void Relation::sort_descendant(vector<unsigned int>& indexes){
+    Comparator comparator(indexes);
+    using std::sort;
+    sort(records.rbegin(), records.rend(), comparator); 
+}
 
 
 

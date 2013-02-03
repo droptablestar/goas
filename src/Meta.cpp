@@ -48,8 +48,6 @@ void Meta::set_rows(const unsigned int n_rows){
 }
 
 void Meta::add_column_name(string name){
-    name.pop_back();/*this is because the string came from the file with
-                    a weird character at the end!!!!*/
     column_names.push_back(name);
 }
 
