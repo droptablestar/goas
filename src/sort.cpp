@@ -14,9 +14,6 @@ void sort(Relation& relation, vector<string>& keys, bool order) {
     /*check for an empty relation*/
     Meta* meta = relation.get_meta();
 
-    /*this has to be changed*/
-    //meta->format_names();
-
     auto keys_present = meta->keys_intersection(keys);
     auto keys_indexes = meta->keys_indexes(keys_present);
     

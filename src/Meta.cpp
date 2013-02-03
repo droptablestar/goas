@@ -79,8 +79,6 @@ unsigned short Meta::strings_in_record() const{
  * considering the copies, if i dont do copies, i can do the O(n^2) approach,
  * but avoiding the copies and the extra data structures, because like I said
  * I cannot destroy the input vectors.*/
-
-/*try to return the constness of this method*/
 vector<string> Meta::keys_intersection(const vector<string>& keys) const{
     vector<string> result;
     for(auto a:keys){
@@ -99,7 +97,6 @@ vector<unsigned int> Meta::keys_indexes(const vector<string>& keys) const{
         auto it = find(column_names.begin(), column_names.end(), i);
         result.push_back(distance(column_names.begin(), it));
     }
-
     return result;
 }
 
