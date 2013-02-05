@@ -26,8 +26,16 @@ void Meta::print() const{
     cout<<"number of columns: "<<n_columns<<endl;
     cout<<"number of rows: "<<n_rows<<endl;
 
-    for(auto i:column_names){
-        cout<<"|  "<<i<<"  ";    
+    const unsigned int padding = 2;
+
+    for(auto& i:column_names) cout<<" "<<i<<" |";    
+    cout<<endl;
+    for(auto& i:column_names){
+        int size = i.size() + padding;
+        for(int j = 0; j < size; ++j){
+            cout<<"-";
+        }
+        cout<<"+";
     }
 }
 

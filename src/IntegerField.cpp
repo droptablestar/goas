@@ -34,3 +34,16 @@ void IntegerField::print() const{
     cout<<field;    
 }
 
+unsigned int IntegerField::number_of_digits() const{
+    if(!field) return 1;
+
+    unsigned int count = 0;
+    int tmp = field;
+    while(tmp){
+        tmp /= 10;
+        ++count;
+    }
+
+    return count;
+}
+

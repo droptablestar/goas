@@ -100,17 +100,23 @@ void Record::print() const{
     using std::cout;
     using std::endl;
 
+    const unsigned int padding_string = 2;
+    const unsigned int padding_integer = 1;
+
     for(int i=0; i<number_of_columns; ++i){
+
         if(meta->get_type(i)==TYPE_STRING){
-            cout<<"| ";
+            unsigned int len = meta->get_name(i).size() + padding_string - container_SF[SF_index].length();
+            for(int k = 0; k < len; ++k) cout<<" ";
             container_SF[SF_index].print(); 
-            cout<<"  ";
+            cout<<" |";
             ++SF_index;
         }
         else if(meta->get_type(i)==TYPE_INTEGER){
-            cout<<"| ";
+            unsigned int len = meta->get_name(i).size() + padding_integer - container_IF[IF_index].number_of_digits();
+            for(int k = 0; k < len; ++k) cout<<" ";
             container_IF[IF_index].print();    
-            cout<<"  ";
+            cout<<" |";
             ++IF_index;
         }
     }

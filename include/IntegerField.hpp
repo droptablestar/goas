@@ -13,6 +13,7 @@ class IntegerField{
         bool operator!=(const IntegerField& other) const;
 
         void print() const;
+        unsigned number_of_digits() const;
 
     private:
         int field;
