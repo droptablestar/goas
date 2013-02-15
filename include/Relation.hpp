@@ -19,6 +19,7 @@ class Relation{
         void set_size();
         void sort_ascendant(std::vector<unsigned int>& indexes);
         void sort_descendant(std::vector<unsigned int>& indexes);
+        void project(std::vector<unsigned int>& indexes);
 
     private:
         std::vector<Record*> records;

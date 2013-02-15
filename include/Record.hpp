@@ -20,6 +20,7 @@ class Record{
         void add(IntegerField& field);
         void print() const;
         unsigned int size() const;
+        void remove(std::vector<unsigned int> indexes);
         
 
     private:
@@ -121,6 +122,46 @@ void Record::print() const{
         }
     }
     cout<<endl;
+}
+
+/*This cannot be that complicated!!!!!!!!*/
+inline
+void Record::remove(std::vector<unsigned int> indexes){
+    std::vector<int> types;
+    for(auto& i:indexes) types.push_back(meta->get_type(i));
+    
+    std::vector<unsigned int> indexes_original(indexes.size());
+    std::copy(indexes.begin(), indexes.end(), indexes_original.begin());
+
+    unsigned int count_SF = 0;
+    unsigned int count_IF = 0;
+
+    for(int i=0; i<indexes.size(); ++i){
+        if(types[i] == TYPE_STRING){
+            unsigned int number_of_strings = 0;
+            for(unsigned int x = 0; x <= indexes_original[i]; ++x){
+                if(meta->get_type(x) == TYPE_STRING) ++number_of_strings;
+            }
+            unsigned int index = 0;
+            if(number_of_strings == 0) index = 0;
+            else index = number_of_strings-1-count_SF;
+            container_SF.erase(container_SF.cbegin()+index); 
+            ++count_SF;
+            for(auto& j : indexes) --j;
+        }
+        else{
+            unsigned int number_of_integers = 0;
+            for(unsigned int x = 0; x <= indexes_original[i]; ++x){
+                if(meta->get_type(x) == TYPE_INTEGER) ++number_of_integers;
+            }
+            unsigned int index = 0;
+            if(number_of_integers == 0) index = 0;
+            else index = number_of_integers-1-count_IF;
+            container_IF.erase(container_IF.cbegin()+index); 
+            for(auto& j : indexes) --j;
+            ++count_IF;
+        }
+    }
 }
 
 #endif //RECORD_W98HRG9WEH8RG9W8HERG98WHERG

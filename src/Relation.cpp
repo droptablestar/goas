@@ -11,6 +11,7 @@ class Comparator{
     public:
         Comparator(vector<unsigned int>& indexes):indexes(indexes){}
         bool operator()(Record* a, Record* b){
+            /*this should be < not less_than*/
             bool ret = (*a).less_than(*b, indexes);
             return ret;
         }
@@ -47,7 +48,7 @@ void Relation::print() const{
     meta.print();
     cout<<endl;
     
-    for(auto i:records){
+    for(auto& i:records){
         i->print();    
     }
     cout<<"("<<meta.rows()<<" rows)"<<endl;
@@ -65,5 +66,8 @@ void Relation::sort_descendant(vector<unsigned int>& indexes){
     sort(records.rbegin(), records.rend(), comparator); 
 }
 
-
+void Relation::project(vector<unsigned int>& indexes){
+    for(auto& i : records) i->remove(indexes);
+    meta.remove(indexes);
+}
 

@@ -9,6 +9,7 @@ SET(SOURCES
     Relation.cpp
     scan.cpp
     sort.cpp
+    project.cpp
     MMapLinux.cpp
     Meta.cpp
     StringUtilities.cpp
