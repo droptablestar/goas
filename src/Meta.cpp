@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <algorithm>
-#include <unordered_set>
 
 using namespace std;
 
@@ -120,4 +119,10 @@ void Meta::remove(vector<unsigned int>& indexes){
         ++count;
     }    
 }
+
+bool Meta::is_present(string& field){
+    if(find(column_names.begin(), column_names.end(), field) == column_names.end()) return false;
+    return true;
+}
+
 

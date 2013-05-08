@@ -15,14 +15,17 @@ IntegerField& IntegerField::operator=(const IntegerField& other){
 }
 
 bool IntegerField::operator==(const IntegerField& other) const{
+    cout<<" == "<<endl;
     return field == other.field;
 }
 
 bool IntegerField::operator<(const IntegerField& other) const{
+    cout<<" < "<<endl;
     return field < other.field;    
 }
 
 bool IntegerField::operator>(const IntegerField& other) const{
+    cout<<" > "<<endl;
     return field > other.field;    
 }
 

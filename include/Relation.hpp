@@ -20,10 +20,12 @@ class Relation{
         void sort_ascendant(std::vector<unsigned int>& indexes);
         void sort_descendant(std::vector<unsigned int>& indexes);
         void project(std::vector<unsigned int>& indexes);
+        void erase(std::vector<std::string>& predicates);
 
     private:
         std::vector<Record*> records;
         Meta meta;
+        std::vector<std::string> predicates;
 };
 
 #endif //RELATION_Q9HF9QWHEF98WHEF9

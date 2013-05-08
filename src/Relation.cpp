@@ -71,3 +71,35 @@ void Relation::project(vector<unsigned int>& indexes){
     meta.remove(indexes);
 }
 
+void Relation::erase(std::vector<std::string>& predicates){
+    cout<<"erasing\n";
+    records.erase(remove_if(records.begin(), records.end(), [&](Record* r){
+        cout<<"here"<<endl;
+    
+        bool res = false;
+
+        for(int i=0, j=1, z=3; j<predicates.size(); i+=4, j+=4, z+=4){
+            //cout<<"operands "<<predicates[i]<<" "<<predicates[i+2]<<endl;
+            /*if the operand exists in the relation, meta->is_present() TODO*/
+            vector<string> keys_present = {predicates[i], predicates[i+2]};
+            auto keys_indexes = meta.keys_indexes(keys_present);
+       
+            //cout<<"operator "<<predicates[j]<<endl;
+            //if(z<predicates.size()) cout<<"logic op "<<predicates[z]<<endl;     
+            vector<string> pred = {predicates[i], predicates[i+1], predicates[i+2]};
+            res = false;
+            res = r->is(pred);
+            cout<<" res: "<<res<<endl;
+            
+        }
+
+        if(res){
+            cout<<"returning false\n";
+            return false;
+        }
+        cout<<"returning true\n";
+        return true;
+         
+        }), records.end());
+}
+

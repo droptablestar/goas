@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <iostream>
+#include <cstring>
 
 class Record{
     public:
@@ -21,6 +22,7 @@ class Record{
         void print() const;
         unsigned int size() const;
         void remove(std::vector<unsigned int> indexes);
+        bool is(std::vector<std::string> predicate); //only one predicate
         
 
     private:
@@ -161,6 +163,71 @@ void Record::remove(std::vector<unsigned int> indexes){
             for(auto& j : indexes) --j;
             ++count_IF;
         }
+    }
+}
+
+inline
+bool Record::is(std::vector<std::string> predicate){//single predicate
+    std::string op1 = predicate[0];
+    std::string op2 = predicate[2];
+    std::string op = predicate[1];
+
+    //if(!meta->is_present(op2))//operator 2 is a number. 
+
+    std::vector<std::string> operands = {op1};
+    auto keys_indexes = meta->keys_indexes(operands);
+
+    int type_op1 = meta->get_type(keys_indexes[0]);
+
+    //std::cout<<"op1: "<<op1<<" id: "<<keys_indexes[0]<<" op2: "<<op2<<" op: "<<op<<" type: "<<meta->get_type(keys_indexes[0])<<std::endl;
+    
+    if(type_op1 == TYPE_STRING){
+        unsigned int number_of_strings = 0;
+        for(unsigned int x = 0; x <= keys_indexes[0]; ++x){
+            if(meta->get_type(x) == TYPE_STRING) ++number_of_strings;
+        }
+
+        RawStringField field = container_SF[number_of_strings-1]; 
+
+        if(op.compare("=")){
+            field.print();
+            std::cout<<"="<<op2<<std::endl;
+            if(strcmp(field.raw_ptr(), op2.c_str()) == 0) return true;    
+            return false;
+        }
+        else if(op.compare("<")){
+            field.print();
+            std::cout<<"<"<<op2<<std::endl;
+            if(strcmp(field.raw_ptr(), op2.c_str())<0) return true;
+            return false;
+        }
+        else if(op.compare(">")){
+            field.print();
+            std::cout<<">"<<op2<<std::endl;
+            if(strcmp(field.raw_ptr(), op2.c_str())>0) return true;
+            return false;
+        }
+    }
+    else{
+        std::cout<<"here!"<<std::endl;
+        unsigned int number_of_ints = 0;
+        for(unsigned int x = 0; x <= keys_indexes[0]; ++x){
+            if(meta->get_type(x) == TYPE_INTEGER) ++number_of_ints;
+        }
+        std::cout<<"here1!"<<std::endl;
+
+        IntegerField field = container_IF[number_of_ints-1]; 
+        IntegerField tmp(atoi(op2.c_str()));
+        field.print();
+        std::cout<<op;
+        tmp.print();
+        std::cout<<"\n";
+        std::cout<<"here2!"<<std::endl;
+
+
+        if(!op.compare("=")) return field == tmp;    
+        else if(!op.compare("<")) return field < tmp;
+        else if(!op.compare(">")) return field > tmp;
     }
 }
 
