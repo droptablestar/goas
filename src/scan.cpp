@@ -1,5 +1,6 @@
 
 #include "Relation.hpp"
+
 #include "Record.hpp"
 #include "Scan.hpp"
 #include "MMapLinux.hpp"
@@ -13,7 +14,7 @@
 
 using namespace std;
 
-void scan(const char *file_name, Relation& relation){
+void scan(const char* file_name, Relation& relation){
     MMapLinux input(file_name);
 
     input.open_file();

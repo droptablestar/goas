@@ -8,10 +8,12 @@ SET(LIBNAME oas)
 SET(SOURCES
     Relation.cpp
     scan.cpp
+    sort.cpp
+    project.cpp
+    select.cpp
     MMapLinux.cpp
     Meta.cpp
     StringUtilities.cpp
-    Field.cpp
     IntegerField.cpp
     RawStringField.cpp
 )

@@ -2,27 +2,30 @@
 #define RELATION_Q9HF9QWHEF98WHEF9
 
 #include "Meta.hpp"
-#include "Record.hpp"
-#include "Field.hpp"
 
 #include <vector>
 #include <string>
-
-#define INT 0
-#define STRING 1
 
 class Record;
 
 class Relation{
     public:
-        void add_record(Record& rec);
-        Meta& get_meta();
+        Relation();
+        ~Relation();
+
+        void add_record(Record* rec);
+        Meta* get_meta();
         void print() const;
         void set_size();
+        void sort_ascendant(std::vector<unsigned int>& indexes);
+        void sort_descendant(std::vector<unsigned int>& indexes);
+        void project(std::vector<unsigned int>& indexes);
+        void erase(std::vector<std::string>& predicates);
 
     private:
-        std::vector<Record> records;
+        std::vector<Record*> records;
         Meta meta;
+        std::vector<std::string> predicates;
 };
 
 #endif //RELATION_Q9HF9QWHEF98WHEF9

@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 2.8)
+
+SET(BINARY_NAME tests)
+
+SET(GTEST_DIR "/usr/include/gtest" CACHE STRING "Options: [$ENV{HOME}/gtest")
+SET(GMOCK_DIR "/usr/include/gmock" CACHE STRING "Options: [$ENV{HOME}/gmock")
+
+LINK_DIRECTORIES(${GTEST_DIR}/)
+LINK_DIRECTORIES(${GMOCK_DIR}/)
+LINK_DIRECTORIES(${PROJECT_SOURCE_DIR}/../lib)
+
+SET(SOURCES
+    tests.cpp
+    IntegerFieldTests.cpp
+    RawStringFieldTests.cpp
+    MetaTests.cpp
+    RecordTests.cpp
+    MetaBasicPopulator.cpp
+    RecordBasicPopulator.cpp
+)
+
+ADD_EXECUTABLE(${BINARY_NAME} ${SOURCES})
+
+INCLUDE_DIRECTORIES(../include/)
+INCLUDE_DIRECTORIES(include/)
+
+INCLUDE_DIRECTORIES(${GTEST_DIR}/include)
+INCLUDE_DIRECTORIES(${GMOCK_DIR}/include)
+
+TARGET_LINK_LIBRARIES(${BINARY_NAME} gtest )
+TARGET_LINK_LIBRARIES(${BINARY_NAME} gmock)
+TARGET_LINK_LIBRARIES(${BINARY_NAME} oas)
+
+
+

@@ -21,7 +21,13 @@ configurationCommands = ['./goas ../tst/oas_queries/0scan/1_scan',
                          './goas ../tst/oas_queries/0scan/100k_scan',
                          './goas ../tst/oas_queries/0scan/200k_scan',
                          './goas ../tst/oas_queries/0scan/300k_scan',
-                         './goas ../tst/oas_queries/0scan/400k_scan']
+                         './goas ../tst/oas_queries/0scan/400k_scan',
+                         './goas ../tst/oas_queries/0scan/500k_scan',
+                         './goas ../tst/oas_queries/0scan/600k_scan',
+                         './goas ../tst/oas_queries/0scan/700k_scan',
+                         './goas ../tst/oas_queries/0scan/800k_scan',
+                         './goas ../tst/oas_queries/0scan/900k_scan',
+                         './goas ../tst/oas_queries/0scan/1000k_scan']
 
 def changeDirectoryToBin():
     os.chdir('bin')

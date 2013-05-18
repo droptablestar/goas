@@ -6,7 +6,6 @@
 
 class StringUtilities{
     public:
-        static unsigned int get_size_of_string(const char* s);
         static std::string read_string_type(char* &s);
 };
 
