@@ -12,9 +12,6 @@ IntegerField::IntegerField(const IntegerField& other):field(other.field){}
 IntegerField& IntegerField::operator=(const IntegerField& other){
     field = other.field;
     return *this;
-
-
-
 }
 
 bool IntegerField::operator==(const IntegerField& other) const{
