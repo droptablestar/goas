@@ -111,10 +111,10 @@ void Meta::remove(vector<unsigned int>& indexes){
     /*fix this, is not safe client must put the keys in order to success in the removal*/
     unsigned int count = 0;
     for(auto& i : indexes){
-        column_names.erase(column_names.cbegin()+i-count);
+        column_names.erase(column_names.begin()+i-count);
         if(column_types[i-count] == TYPE_INTEGER) --ints_in_record;
         else --strs_in_record;
-        column_types.erase(column_types.cbegin()+i-count);
+        column_types.erase(column_types.begin()+i-count);
         --n_columns;
         ++count;
     }    

@@ -147,7 +147,7 @@ void Record::remove(std::vector<unsigned int> indexes){
             unsigned int index = 0;
             if(number_of_strings == 0) index = 0;
             else index = number_of_strings-1-count_SF;
-            container_SF.erase(container_SF.cbegin()+index); 
+            container_SF.erase(container_SF.begin()+index); 
             ++count_SF;
             for(auto& j : indexes) --j;
         }
@@ -159,7 +159,7 @@ void Record::remove(std::vector<unsigned int> indexes){
             unsigned int index = 0;
             if(number_of_integers == 0) index = 0;
             else index = number_of_integers-1-count_IF;
-            container_IF.erase(container_IF.cbegin()+index); 
+            container_IF.erase(container_IF.begin()+index); 
             for(auto& j : indexes) --j;
             ++count_IF;
         }
