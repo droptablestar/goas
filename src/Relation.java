@@ -1,6 +1,8 @@
 import java.util.Vector;
 
 public class Relation {
+    public static final Byte INT = 0x00;
+    public static final Byte STRING = 0x01;
     public static final int NUM_RECS = 100;
     
     public Meta meta;

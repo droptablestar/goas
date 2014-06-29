@@ -3,6 +3,7 @@ import java.util.Vector;
 public class Meta {
     public int numCols;
     public int numRows;
+    public Vector<Byte> columnTypes;
     public Vector<String> columnNames;
 
     public void print() {

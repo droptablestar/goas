@@ -1,2 +1,0 @@
-x0:=scan(../tst/oas_tables_text/100k);
-x1:=select(x0,[(two,=,1)]);

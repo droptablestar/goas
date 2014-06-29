@@ -1,2 +1,0 @@
-x0:=scan(../tst/oas_tables_text/1k);
-x1:=sort(x0,[unique1],ASC);
